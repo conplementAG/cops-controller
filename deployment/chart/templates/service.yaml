@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "cops-namespace-controller.name" . }}
+  name: {{ template "cops-controller.name" . }}
   labels:
-    app: {{ template "cops-namespace-controller.name" . }}
-    chart: {{ template "cops-namespace-controller.chart" . }}
+    app: {{ template "cops-controller.name" . }}
+    chart: {{ template "cops-controller.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -14,5 +14,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ template "cops-namespace-controller.name" . }}
+    app: {{ template "cops-controller.name" . }}
     release: {{ .Release.Name }}
