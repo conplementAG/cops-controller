@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "cops-controller.name" . }}
+  labels:
+    app: {{ template "cops-controller.name" . }}
+    chart: {{ template "cops-controller.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "cops-controller.name" . }}
+    release: {{ .Release.Name }}

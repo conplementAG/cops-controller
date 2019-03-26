@@ -1,0 +1,6 @@
+apiVersion: coreops.conplement.cloud/v1
+kind: CopsNamespace
+metadata:
+  name: my-party-namespace
+spec:
+  customField: custom-value
