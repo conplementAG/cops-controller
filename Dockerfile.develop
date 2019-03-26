@@ -1,0 +1,15 @@
+FROM microsoft/dotnet:2.2-sdk
+ARG BUILD_CONFIGURATION=Debug
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+EXPOSE 80
+
+WORKDIR /src
+COPY ["ConplementAG.CopsController.csproj", "./"]
+RUN dotnet restore "ConplementAG.CopsController.csproj"
+COPY . .
+RUN dotnet build ConplementAG.CopsController.csproj --no-restore -c $BUILD_CONFIGURATION
+
+RUN echo "exec dotnet run ConplementAG.CopsController.csproj --no-build --no-launch-profile -c $BUILD_CONFIGURATION -- \"\$@\"" > /entrypoint.sh
+
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
