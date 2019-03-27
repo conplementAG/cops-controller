@@ -1,0 +1,8 @@
+apiVersion: coreops.conplement.cloud/v1
+kind: CopsNamespace
+metadata:
+  name: my-party-namespace
+spec:
+  namespace-admin-users:
+  - Test.User@conplement.de
+  - Second.User@conplement.de
