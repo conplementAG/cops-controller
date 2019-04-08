@@ -10,8 +10,15 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
+  dockerId: coreops
   imageName: 'cops-controller:$(build.buildId)'
 
 steps:
-- script: docker build -f Dockerfile -t $(imageName) .
-  displayName: 'docker build'
+- script: |
+    docker build -t $(dockerId).azurecr.io/$(imageName) .
+    docker login -u $(dockerId) -p $(pswd) $(dockerId).azurecr.io
+    docker push $(dockerId).azurecr.io/$(imageName)
+  env:
+    pswd: $(dockerPassword)
+
+
