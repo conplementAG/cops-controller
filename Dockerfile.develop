@@ -2,7 +2,8 @@ FROM microsoft/dotnet:2.2-sdk
 ARG BUILD_CONFIGURATION=Debug
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV DOTNET_USE_POLLING_FILE_WATCHER=true
-EXPOSE 80
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
 
 WORKDIR /src
 COPY ["ConplementAG.CopsController.csproj", "./"]
