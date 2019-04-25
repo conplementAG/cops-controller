@@ -9,7 +9,6 @@ namespace ConplementAG.CopsController.Models
 
         [JsonProperty("status")]
         public CopsStatus Status { get; set; }
-
     }
 
     public class CopsStatus
@@ -20,5 +19,4 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("namespaces")]
         public int Namespaces { get; set; }
     }
-
 }

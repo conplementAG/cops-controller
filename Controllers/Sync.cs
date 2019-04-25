@@ -1,8 +1,6 @@
-﻿using ConplementAG.CopsController.Models;
+﻿using ConplementAG.CopsController.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 
 namespace ConplementAG.CopsController.Controllers
 {

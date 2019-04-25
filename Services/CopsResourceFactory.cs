@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace ConplementAG.CopsController.Controllers
+namespace ConplementAG.CopsController.Services
 {
     public static class CopsResourceFactory
     {

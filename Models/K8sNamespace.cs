@@ -11,19 +11,17 @@ namespace ConplementAG.CopsController.Models
         public string ApiVersion { get; set; }
 
         [JsonProperty("metadata")]
-        public Metadata Metadata { get; set; }
+        public K8sNamespaceMetadata Metadata { get; set; }
 
         public K8sNamespace(string name)
         {
             Kind = "Namespace";
             ApiVersion = "v1";
-            Metadata = new Metadata { Name = name };
+            Metadata = new K8sNamespaceMetadata { Name = name };
         }
-
-        public string ToJson() => JsonConvert.SerializeObject(this, Converter.Settings);
     }
 
-    public partial class Metadata
+    public class K8sNamespaceMetadata
     {
         [JsonProperty("name")]
         public string Name { get; set; }

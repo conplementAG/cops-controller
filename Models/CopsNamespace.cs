@@ -13,7 +13,6 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("spec")]
         public CopsSpec Spec { get; set; }
 
-
         public static CopsNamespace FromJson(string json) => JsonConvert.DeserializeObject<CopsNamespace>(json, Converter.Settings);
     }
 

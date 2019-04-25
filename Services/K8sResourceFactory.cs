@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ConplementAG.CopsController.Controllers
+namespace ConplementAG.CopsController.Services
 {
     public class K8sResourceFactory
     {
@@ -20,7 +20,9 @@ namespace ConplementAG.CopsController.Controllers
         {
             return Tuple.Create<IList<object>, object>(new List<object>
             {
-                new K8sNamespace(copsNamespace.Metadata.Name)
+                new K8sNamespace(copsNamespace.Metadata.Name),
+                K8sRole.NamespaceFullAccess(copsNamespace.Metadata.Name),
+                K8sRoleBinding.NamespaceFullAccess(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers)
             }, copsNamespace.Status ?? new CopsStatus { Name = copsNamespace.Metadata.Name, Namespaces = 1 });
         }
     }
