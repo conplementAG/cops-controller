@@ -26,7 +26,7 @@ namespace ConplementAG.CopsController.Models
             {
                 Kind = "RoleBinding",
                 ApiVersion = "rbac.authorization.k8s.io/v1",
-                Metadata = new K8sMetadata { Name = $"{namespacename}-user-full-access-rolebinding", Namespace = namespacename },
+                Metadata = new K8sMetadata { Name = $"copsnamespace-full-access-rolebinding", Namespace = namespacename },
                 RoleRef = new K8sRoleRef("ClusterRole", "copsnamespace-full-access-role", "rbac.authorization.k8s.io")
             };
 
@@ -35,6 +35,18 @@ namespace ConplementAG.CopsController.Models
             roleBinding.Subjects = subjects.ToArray();
 
             return roleBinding;
+        }
+
+        public static K8sRoleBinding CopsNamespaceEdit(string namespacename, string[] users)
+        {
+            return new K8sRoleBinding
+            {
+                Kind = "RoleBinding",
+                ApiVersion = "rbac.authorization.k8s.io/v1",
+                Metadata = new K8sMetadata { Name = $"{namespacename}-copsnamespace-edit-rolebinding", Namespace = namespacename },
+                RoleRef = new K8sRoleRef("ClusterRole", $"{namespacename}-copsnamespace-edit-role", "rbac.authorization.k8s.io"),
+                Subjects = users.ToList().Select(user => { return new K8sUserSubjectItem(user, "rbac.authorization.k8s.io"); }).ToList<K8sSubjectBaseItem>().ToArray()
+            };
         }
     }
 

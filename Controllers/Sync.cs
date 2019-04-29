@@ -23,13 +23,12 @@ namespace ConplementAG.CopsController.Controllers
             try
             {
                 var copsResource = CopsResourceFactory.Create(value);
-                var k8sResourceTuple = K8sResourceFactory.Create(copsResource);
+                var k8sResources = K8sResourceFactory.Create(copsResource);
 
                 JObject response = JObject.FromObject(
                     new
                     {
-                        children = JArray.FromObject(k8sResourceTuple.Item1),
-                        status = JObject.FromObject(k8sResourceTuple.Item2)
+                        children = JArray.FromObject(k8sResources)
                     }
                 );
 
