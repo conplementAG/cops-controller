@@ -10,16 +10,16 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
-  dockerId: coreops
+  dockerId: conplementag
   imageBaseName: cops-controller
   imageName: '$(imageBaseName):$(build.buildId)'
 
 steps:
 - script: |
-    docker build -t $(dockerId).azurecr.io/$(imageName) .
-    docker tag $(dockerId).azurecr.io/$(imageName) $(dockerId).azurecr.io/$(imageBaseName):latest
-    docker login -u $(dockerId) -p $(dockerPassword) $(dockerId).azurecr.io
-    docker push $(dockerId).azurecr.io/$(imageName)
-    docker push $(dockerId).azurecr.io/$(imageBaseName):latest
+    docker build -t $(dockerId)/$(imageName) .
+    docker tag $(dockerId)/$(imageName) $(dockerId)/$(imageBaseName):latest
+    docker login -u $(dockerUsername) -p $(dockerPassword)
+    docker push $(dockerId)/$(imageName)
+    docker push $(dockerId)/$(imageBaseName):latest
 
 
