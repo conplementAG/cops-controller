@@ -18,7 +18,7 @@ steps:
 - script: |
     docker build -t $(dockerId)/$(imageName) .
     docker tag $(dockerId)/$(imageName) $(dockerId)/$(imageBaseName):latest
-    docker login -u $(dockerId) -p $(dockerPassword)
+    docker login -u $(dockerUsername) -p $(dockerPassword)
     docker push $(dockerId)/$(imageName)
     docker push $(dockerId)/$(imageBaseName):latest
 
