@@ -21,7 +21,6 @@ namespace ConplementAG.CopsController.Services
             return Tuple.Create<IList<object>, object>(new List<object>
             {
                 new K8sNamespace(copsNamespace.Metadata.Name),
-                K8sRole.NamespaceFullAccess(copsNamespace.Metadata.Name),
                 K8sRoleBinding.NamespaceFullAccess(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers)
             }, copsNamespace.Status ?? new CopsStatus { Name = copsNamespace.Metadata.Name, Namespaces = 1 });
         }
