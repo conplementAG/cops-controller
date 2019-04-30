@@ -24,7 +24,7 @@ namespace ConplementAG.CopsController.Models
 
     public partial class CopsSpec
     {
-        [JsonProperty("namespace-admin-users")]
+        [JsonProperty("namespaceAdminUsers")]
         public string[] NamespaceAdminUsers { get; set; }
     }
 }
