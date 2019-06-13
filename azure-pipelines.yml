@@ -13,7 +13,7 @@ pool:
 variables:
   dockerId: conplementag
   imageBaseName: cops-controller
-  imageName: '$(imageBaseName):dev-$(build.buildNumber)'
+  imageName: '$(imageBaseName):$(build.buildNumber)-dev'
 
 steps:
 - script: |
