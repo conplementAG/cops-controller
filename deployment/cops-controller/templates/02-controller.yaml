@@ -2,7 +2,7 @@ apiVersion: metacontroller.k8s.io/v1alpha1
 kind: CompositeController
 metadata:
   name: cops-controller
-  {{ if hasKey .Values "namespace" }}namespace: {{ .Values.namespace }}{{ end }}
+  {{ if hasKey .Release "namespace" }}namespace: {{ .Release.namespace }}{{ end }}
 spec:
   generateSelector: true
   parentResource:
