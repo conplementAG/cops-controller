@@ -4,7 +4,7 @@ build:
   context: .
   dockerfile: Dockerfile
 install:
-  chart: deployment/chart
+  chart: deployment/cops-controller
   values:
   - values.dev.yaml?
   - secrets.dev.yaml?
