@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "cops-controller.name" . }}
@@ -23,7 +23,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          pullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 8080
