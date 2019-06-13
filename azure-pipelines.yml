@@ -22,3 +22,8 @@ steps:
     docker login -u $(dockerUsername) -p $(dockerPassword)
     docker push $(dockerId)/$(imageName)
     docker push $(dockerId)/$(imageBaseName):latest
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.SourcesDirectory)/deployment/chart' 
+    artifactName: 'helmchart' 
