@@ -24,4 +24,4 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: '$(Build.SourcesDirectory)/deployment/cops-controller' 
-    artifactName: 'helmchart' 
+    artifactName: 'cops-controller' 
