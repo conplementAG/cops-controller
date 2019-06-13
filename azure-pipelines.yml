@@ -9,8 +9,15 @@ trigger:
 pool:
   vmImage: 'Ubuntu-16.04'
 
+variables:
+  dockerId: conplementag
+  imageBaseName: cops-controller
+  imageName: '$(imageBaseName):dev-$(build.buildId)'
+
 steps:
 - script: |
-    docker build -t cops-controller .
-
-
+    docker build -t $(dockerId)/$(imageName) .
+    docker tag $(dockerId)/$(imageName) $(dockerId)/$(imageBaseName):latest
+    docker login -u $(dockerUsername) -p $(dockerPassword)
+    docker push $(dockerId)/$(imageName)
+    docker push $(dockerId)/$(imageBaseName):latest

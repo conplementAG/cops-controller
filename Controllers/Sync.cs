@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ConplementAG.CopsController.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using Serilog;
+using System;
+using System.Net;
 
 namespace ConplementAG.CopsController.Controllers
 {
@@ -23,27 +20,27 @@ namespace ConplementAG.CopsController.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]Newtonsoft.Json.Linq.JObject value)
         {
-            var namespaceName = value["parent"]["metadata"]["name"];
-            
-            JObject response = JObject.FromObject(
-                new {
-                    children = new[] {
-                        new {
-                            apiVersion = "v1",
-                            kind = "Namespace",
-                            metadata = new {
-                                name = namespaceName
-                            }
-                        }
-                    },
-                    status = new {
-                        namespaces = 1,
-                        name = namespaceName
-                    }
-                }
-            );
+            try
+            {
+                var copsResource = CopsResourceFactory.Create(value);
+                var k8sResources = K8sResourceFactory.Create(copsResource);
 
-            return Ok(response);
+                JObject response = JObject.FromObject(
+                    new
+                    {
+                        children = JArray.FromObject(k8sResources)
+                    }
+                );
+
+                Log.Debug("CopsResource {CopsResource} mapped to K8sResource {CopsResource}", value["parent"], response);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error handling CopsResource {CopsResourceKind}", value["parent"]["kind"]);
+            }
+
+            return StatusCode((int)HttpStatusCode.InternalServerError);
         }
-    }    
+    }
 }

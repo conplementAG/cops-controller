@@ -19,9 +19,9 @@ spec:
       properties:
         spec:
           required:
-          - namespace-admin-users
+          - namespaceAdminUsers
           properties:
-            namespace-admin-users:
+            namespaceAdminUsers:
               description: |-
                 Array with all the namespace administrators. You need to reference the administrators by specifying 
                 their Conplement Azure AD User IDs, which is usually in the form of 

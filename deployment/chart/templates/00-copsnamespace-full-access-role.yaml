@@ -1,0 +1,17 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: copsnamespace-full-access-role
+rules:
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: [ "rolebindings", "roles" ]
+  verbs: ["list", "get"]
+- apiGroups: ["autoscaling"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["", "extensions", "apps", "batch"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["monitoring.coreos.com"]
+  resources: ["servicemonitors"]
+  verbs: ["*"]
