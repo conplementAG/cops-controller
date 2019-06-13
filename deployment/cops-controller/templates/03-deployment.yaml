@@ -2,7 +2,7 @@ apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: {{ template "cops-controller.name" . }}
-  {{ if hasKey .Values "namespace" }}namespace: {{ .Values.namespace }}{{ end }}
+  {{ if hasKey .Release "namespace" }}namespace: {{ .Release.namespace }}{{ end }}
   labels:
     app: {{ template "cops-controller.name" . }}
     chart: {{ template "cops-controller.chart" . }}
