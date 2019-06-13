@@ -1,8 +1,8 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "cops-controller.name" . }}
-  {{ if hasKey .Values "namespace" }}namespace: {{ .Values.namespace }}{{ end }}
+  {{ if hasKey .Release "namespace" }}namespace: {{ .Release.namespace }}{{ end }}
   labels:
     app: {{ template "cops-controller.name" . }}
     chart: {{ template "cops-controller.chart" . }}
@@ -23,7 +23,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          pullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 8080

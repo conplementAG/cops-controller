@@ -1,6 +1,6 @@
-{{- if hasKey .Values "namespace" }}
+{{- if hasKey .Release "namespace" }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .Values.namespace }}
+  name: {{ .Release.namespace }}
 {{- end }}
