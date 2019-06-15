@@ -22,6 +22,16 @@ namespace ConplementAG.CopsController.Models
 
         public static K8sRoleBinding NamespaceFullAccess(string namespacename, string[] users)
         {
+            if (string.IsNullOrEmpty(namespacename))
+            {
+                throw new System.ArgumentException("Namespace was expected to be defined", nameof(namespacename));
+            }
+
+            if (users is null)
+            {
+                throw new System.ArgumentNullException(nameof(users));
+            }
+
             var roleBinding = new K8sRoleBinding
             {
                 Kind = "RoleBinding",

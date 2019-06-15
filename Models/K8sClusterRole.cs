@@ -21,8 +21,8 @@ namespace ConplementAG.CopsController.Models
             return new K8sClusterRole
             {
                 Kind = "ClusterRole",
-                ApiVersion = "rbac.authorization.k8s.io/v1beta1",
-                Metadata = new K8sMetadata { Name = $"{namespacename}-copsnamespace-edit-role", Namespace = namespacename },
+                ApiVersion = "rbac.authorization.k8s.io/v1",
+                Metadata = new K8sMetadata { Name = $"{namespacename}-copsnamespace-edit-role" },
                 Rules = new K8sRule[]
                 {
                     new K8sRule(new[]{ "coreops.conplement.cloud" }, new[]{ "CopsNamespace" }, new[] { namespacename }, new[]{ "get", "list", "update", "delete" })
