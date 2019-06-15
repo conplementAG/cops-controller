@@ -23,7 +23,12 @@ For developing, we use Visual Studio Code and Azure Dev Spaces (running inside o
 
 1. Create / update your cops cluster to the latest state. Metacontroller, which is required for this controller to work, is delivered out of the box.
 
-2. Install / setup Azure DevSpaces on your cluster, incl. your DevSpace `az aks use-dev-spaces -g ... -n ... --space space_name`
+2. Install / setup Azure DevSpaces on your cluster, incl. your DevSpace 
+
+`az aks use-dev-spaces -g ... -n ... --space space_name`
+
+Install the Azure DevSpaces CLI and run:
+`azds space select --name your_space_name`
 
 3. Deploy the custom resource definitions `kubectl apply -f deployment/crds`
 
