@@ -32,7 +32,7 @@ namespace ConplementAG.CopsController.Controllers
                     }
                 );
 
-                Log.Debug("CopsResource {CopsResource} mapped to K8sResource {CopsResource}", value["parent"], response);
+                Log.Debug("RESPONSE===============================" + response.ToString());
                 return Ok(response);
             }
             catch (Exception ex)
