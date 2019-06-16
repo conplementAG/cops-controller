@@ -5,7 +5,7 @@ metadata:
 rules:
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: [ "rolebindings", "roles" ]
-  verbs: ["list", "get"]
+  verbs: ["*"]
 - apiGroups: ["autoscaling"]
   resources: ["*"]
   verbs: ["*"]
