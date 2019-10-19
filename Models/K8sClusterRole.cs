@@ -25,7 +25,7 @@ namespace ConplementAG.CopsController.Models
                 Metadata = new K8sMetadata { Name = $"{namespacename}-copsnamespace-edit-role" },
                 Rules = new K8sRule[]
                 {
-                    new K8sRule(new[]{ "coreops.conplement.cloud" }, new[]{ "CopsNamespace" }, new[] { namespacename }, new[]{ "get", "list", "update", "delete" })
+                    new K8sRule(new[]{ "coreops.conplement.cloud" }, new[]{ "copsnamespaces" }, new[] { namespacename }, new[]{ "get", "list", "update", "patch", "delete" })
                 }
             };
         }
