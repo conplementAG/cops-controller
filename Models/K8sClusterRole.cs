@@ -16,7 +16,7 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("rules")]
         public K8sRule[] Rules { get; set; }
 
-        public static K8sClusterRole NamespaceCopsResourceEdit(string namespacename)
+        public static K8sClusterRole CopsNamespaceEdit(string namespacename)
         {
             return new K8sClusterRole
             {
@@ -25,7 +25,7 @@ namespace ConplementAG.CopsController.Models
                 Metadata = new K8sMetadata { Name = $"{namespacename}-copsnamespace-edit-role" },
                 Rules = new K8sRule[]
                 {
-                    new K8sRule(new[]{ "coreops.conplement.cloud" }, new[]{ "CopsNamespace" }, new[] { namespacename }, new[]{ "get", "list", "update", "delete" })
+                    new K8sRule(new[]{ "coreops.conplement.cloud" }, new[]{ "copsnamespaces" }, new[] { namespacename }, new[]{ "get", "list", "update", "patch", "delete" })
                 }
             };
         }

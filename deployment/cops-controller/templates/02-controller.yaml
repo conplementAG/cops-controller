@@ -18,6 +18,10 @@ spec:
     updateStrategy:
       method: InPlace
   - apiVersion: rbac.authorization.k8s.io/v1
+    resource: clusterrolebindings
+    updateStrategy:
+      method: InPlace
+  - apiVersion: rbac.authorization.k8s.io/v1
     resource: clusterroles
     updateStrategy:
       method: InPlace

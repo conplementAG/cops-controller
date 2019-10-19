@@ -22,8 +22,8 @@ namespace ConplementAG.CopsController.Services
             {
                 new K8sNamespace(copsNamespace.Metadata.Name),
                 K8sRoleBinding.NamespaceFullAccess(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers),
-                K8sRoleBinding.CopsNamespaceEdit(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers),
-                K8sClusterRole.NamespaceCopsResourceEdit(copsNamespace.Metadata.Name)
+                K8sClusterRoleBinding.CopsNamespaceEditBinding(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers),
+                K8sClusterRole.CopsNamespaceEdit(copsNamespace.Metadata.Name)
             };
         }
     }
