@@ -41,7 +41,6 @@ namespace ConplementAG.CopsController.Models
             };
 
             var subjects = users.ToList().Select(user => { return new K8sUserSubjectItem(user, "rbac.authorization.k8s.io"); }).ToList<K8sSubjectBaseItem>();
-            subjects.Add(new K8sServiceAccountSubjectItem("default", namespacename));
             roleBinding.Subjects = subjects.ToArray();
 
             return roleBinding;

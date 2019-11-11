@@ -6,7 +6,6 @@
 
 This is the Kubernetes Controller implementation for Conplement CoreOps specific Kubernetes extensions. Can be seen as a backend to the companion project [copsctl](https://github.com/conplementAG/copsctl)
 
-
 This project is "based" on [metacontroller](https://github.com/GoogleCloudPlatform/metacontroller) and written in C#, mainly for three reasons:
 
 - Metacontroller is the simplest custom controller approach in Kubernetes, and offers easy parent / child resource tracking
@@ -15,7 +14,7 @@ This project is "based" on [metacontroller](https://github.com/GoogleCloudPlatfo
 
 ## Setup
 
-tbd after first release
+Check the instructions on the [release page](https://github.com/conplementAG/cops-controller/releases).
 
 ## Development
 
@@ -26,6 +25,8 @@ For developing, we use Visual Studio Code and Azure Dev Spaces (running inside o
 2. Install / setup Azure DevSpaces on your cluster, incl. your DevSpace 
 
 `az aks use-dev-spaces -g ... -n ... --space space_name`
+
+If the command above fails (like to linux), then you can use the `azds controller create -tn ... -n ... -g ...` command instead.
 
 Install the Azure DevSpaces CLI and run:
 `azds space select --name your_space_name`
