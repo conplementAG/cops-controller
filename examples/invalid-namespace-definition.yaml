@@ -1,6 +1,0 @@
-apiVersion: coreops.conplement.cloud/v1
-kind: CopsNamespace
-metadata:
-  name: invalid-specified-namespace
-spec:
-  this: that
