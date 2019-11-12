@@ -15,14 +15,14 @@ namespace ConplementAG.CopsController.Services
             return (IList<object>)method.Invoke(null, new[] { source });
         }
 
-        // Methode used by reflection call
+        // Method used by reflection call
         private static IList<object> Create(CopsNamespace copsNamespace)
         {
             return new List<object>
             {
                 new K8sNamespace(copsNamespace.Metadata.Name),
-                K8sRoleBinding.NamespaceFullAccess(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers),
-                K8sClusterRoleBinding.CopsNamespaceEditBinding(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers),
+                K8sRoleBinding.NamespaceFullAccess(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers, copsNamespace.Spec.NamespaceAdminServiceAccounts),
+                K8sClusterRoleBinding.CopsNamespaceEditBinding(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers, copsNamespace.Spec.NamespaceAdminServiceAccounts),
                 K8sClusterRole.CopsNamespaceEdit(copsNamespace.Metadata.Name)
             };
         }

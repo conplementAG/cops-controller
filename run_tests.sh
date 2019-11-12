@@ -25,7 +25,7 @@ function usage {
     echo "       - minikube start"
     echo "       - eval $(minikube docker-env)"
     echo "       - docker build . -t cops-controller:latest"
-    echo "       - ./tests.sh -r cops-controller -t latest --install-helm"
+    echo "       - ./run_tests.sh -r cops-controller -t latest --install-helm"
     exit 1
 }
 

@@ -1,8 +1,8 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: copsnamespace-inital-create-role
+  name: copsnamespace-creator
 rules:
 - apiGroups: ["coreops.conplement.cloud"]
-  resources: ["CopsNamespace"]
+  resources: ["copsnamespaces"]
   verbs: ["get", "list", "create"]

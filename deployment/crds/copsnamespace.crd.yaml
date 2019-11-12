@@ -23,9 +23,16 @@ spec:
           properties:
             namespaceAdminUsers:
               description: |-
-                Array with all the namespace administrators. You need to reference the administrators by specifying 
+                Array with all the namespace administrator users. You need to reference the administrators by specifying 
                 their Conplement Azure AD User IDs, which is usually in the form of 
-                Firstname.Lastname@conplement.de (notice the capital letters!)"
+                Firstname.Lastname@conplement.de (notice the capital letters!)
+              type: array
+              items:
+                type: string
+            namespaceAdminServiceAccounts:
+              description: |-
+                Array with all the namespace administrator service accounts. Service accounts need to be specified in the
+                accountname.namespace string format! (for example, myaccount.default)
               type: array
               items:
                 type: string
