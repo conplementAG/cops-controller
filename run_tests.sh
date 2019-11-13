@@ -6,11 +6,11 @@ programname=$0
 UNIVERSAL_TEST_IDENTIFIED="cops-controller-component-tests"
 
 function usage {
-    echo "usage: $programname [-r repository] [-t tag]"
+    echo "usage: $programname [--install-helm-and-cops-controller] [-r repository] [-t tag]"
     echo "  MAKE SURE YOU SPECIFY THE ARGUMENTS IN THE EXACT ORDER AS BELOW, THIS SCRIPT DOES NOT SUPPORT OUT OF ORDER ARGUMENTS!"
-    echo "  -r repository   (MANDATORY) cops controller image repository. Should be accessible from the cluster (e.g. remote registry or local one shared with the cluster)."
-    echo "  -t tag          (MANDATORY) cops controller image tag."
-    echo "  --install-helm  (optional) use to install global helm in the cluster. Make sure you have Helm > 2.16 if you use this option and you are running on k8s > 1.16"
+    echo "  --install-helm-and-cops-controller (optional) use to install global helm in the cluster and to deploy the cops controller specified by the -r and -t arguments. Make sure you have Helm > 2.16 if you use this option and you are running on k8s > 1.16"
+    echo "  -r repository   (optional) cops controller image repository. Should be accessible from the cluster (e.g. remote registry or local one shared with the cluster)."
+    echo "  -t tag          (optional) cops controller image tag."
     echo " "
     echo "Prerequisites: "
     echo "   To run the tests, you need a running k8s cluster and docker engine"
@@ -25,9 +25,9 @@ function usage {
     echo "      or you can use something like minikube docker-env to share the images on your machine."
     echo "       Ubuntu with minikube instructions:"
     echo "       - minikube start"
-    echo "       - eval $(minikube docker-env)"
+    echo "       - import variables with eval from: minikube docker-env"
     echo "       - docker build . -t cops-controller:latest"
-    echo "       - ./run_tests.sh -r cops-controller -t latest --install-helm"
+    echo "       - ./run_tests.sh --install-helm-and-cops-controller -r cops-controller -t latest"
     exit 1
 }
 
@@ -80,20 +80,22 @@ function cleanup {
     exit $exit_code
 }
 
-# mandatory params check
-if [ $1 != "-r" ] || [ -z "$2" ] || [ $3 != "-t" ] || [ -z "$4" ]; then
-    usage
-else
-    repository=$2
-    tag=$4
-    
-    # optional params check
-    if [ -n "$5" ] && [ $5 != "--install-helm" ]; then
+installController="no"
+repository=""
+tag=""
+
+if [ -n "$1" ]; then # if any argument specified
+    # all parameters mandatory now, in correct order
+    if [ $1 != "--install-helm-and-cops-controller" ] || [ $2 != "-r" ] || [ -z "$3" ] || [ $4 != "-t" ] || [ -z "$5" ]; then
         usage
     else
-        # register the cleanup function for all signal types (emulating finally block)
-        trap cleanup EXIT ERR INT TERM
-
-        . ./tests/tests.sh $repository $tag $5
-    fi 
+        installController="yes"
+        repository=$3
+        tag=$5
+    fi
 fi
+
+# register the cleanup function for all signal types (emulating finally block)
+trap cleanup EXIT ERR INT TERM
+
+. ./tests/tests.sh "$installController" "$repository" "$tag"

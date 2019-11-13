@@ -22,30 +22,30 @@ kyloRenAccount="cops-controller-kylo-ren"
 #                           Arrange helpers                             #
 #########################################################################
 function setupCluster {
-    repository=$1
-    tag=$2
-    installHelm=$3
+    installController=$1
+    repository=$2
+    tag=$3
 
-    if [ -n "$3" ]; then
+    if [ $installController == "yes" ]; then
         kubectl -n kube-system create serviceaccount tiller --dry-run=true -o yaml | kubectl apply -f -
         kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller --dry-run=true -o yaml | kubectl apply -f -
         helm init --service-account tiller --wait --upgrade
+
+        # ensure metacontroller dependency in the cluster
+        metacontrollerVersion="v0.4.0"
+        kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/${metacontrollerVersion}/manifests/metacontroller-namespace.yaml"
+        kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/${metacontrollerVersion}/manifests/metacontroller-rbac.yaml"
+        kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/${metacontrollerVersion}/manifests/metacontroller.yaml"
+
+        # install cops controller via the local chart
+        copsControllerNamespace="coreops-cops-controller-component-test"
+        kubectl apply -f deployment/crds
+
+        helm upgrade --install --wait --timeout 60 --namespace $copsControllerNamespace \
+            --set image.repository=$repository \
+            --set image.tag=$tag \
+            cops-controller deployment/cops-controller
     fi
-
-    # ensure metacontroller dependency in the cluster
-    metacontrollerVersion="v0.4.0"
-    kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/${metacontrollerVersion}/manifests/metacontroller-namespace.yaml"
-    kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/${metacontrollerVersion}/manifests/metacontroller-rbac.yaml"
-    kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/${metacontrollerVersion}/manifests/metacontroller.yaml"
-
-    # install cops controller via the local chart
-    copsControllerNamespace="coreops-cops-controller-component-test"
-    kubectl apply -f deployment/crds
-
-    helm upgrade --install --wait --timeout 60 --namespace $copsControllerNamespace \
-        --set image.repository=$1 \
-        --set image.tag=$2 \
-        cops-controller deployment/cops-controller
 }
 
 function setupTheEmpireServiceAccounts {
@@ -171,7 +171,7 @@ function test_shouldUpdateEmpireCnsWithAdditionalRbac {
 #                              Test runner                              #
 #########################################################################
 
-setupCluster $1 $2 $3
+setupCluster "$1" "$2" "$3"
 
 setupTheEmpireServiceAccounts
 
