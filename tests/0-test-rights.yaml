@@ -1,25 +1,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: copsnamespace-create-role
-rules:
-- apiGroups:
-  - coreops.conplement.cloud
-  resources:
-  - copsnamespaces
-  verbs:
-  - list
-  - get
-  - create # no delete intentionally!
----
-apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: copsnamespace-create-binding
+  name: {{BINDING_NAME}}
+  labels: 
+    tests: cops-controller-component-tests
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: copsnamespace-create-role
+  name: copsnamespace-creator
 subjects:
   - kind: ServiceAccount
     name: {{SERVICE_ACCOUNT}}

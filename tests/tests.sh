@@ -1,13 +1,27 @@
 #!/bin/bash
+set -eo pipefail
 
 function fail {
-    echo $1
+    colorecho "RED" "$1"
     exit 1
 }
 
-function setupCluster {
-    set -eo pipefail
+function success {
+    colorecho "GREEN" "$1"
+}
 
+#########################################################################
+#                               Globals                                 #
+#########################################################################
+
+serviceAccountsNamespace="default"
+darthVaderAccount="cops-controller-darth-vader"
+kyloRenAccount="cops-controller-kylo-ren"
+
+#########################################################################
+#                           Arrange helpers                             #
+#########################################################################
+function setupCluster {
     repository=$1
     tag=$2
     installHelm=$3
@@ -34,12 +48,17 @@ function setupCluster {
         cops-controller deployment/cops-controller
 }
 
-function setupTestServiceAccount {
+function setupTheEmpireServiceAccounts {
+    setupServiceAccount $darthVaderAccount $serviceAccountsNamespace
+    setupServiceAccount $kyloRenAccount $serviceAccountsNamespace
+}
+
+function setupServiceAccount {
     testAccount=$1
     testAccountNamespace=$2
 
     # create account
-    kubectl create serviceaccount $testAccount --dry-run=true -o yaml | kubectl apply -f -
+    kubectl create serviceaccount $testAccount -n $testAccountNamespace --dry-run=true -o yaml | kubectl apply -f -
 
     # extract the secret, set into kubeconfig
     serviceAccountSecret=$(kubectl get serviceaccount $testAccount -n $testAccountNamespace -o jsonpath={.secrets[0].name})
@@ -48,43 +67,120 @@ function setupTestServiceAccount {
 
     # create the new kubeconfig context
     kubectl config set-context $testAccount --user=$testAccount --cluster=$(kubectl config view --minify -o jsonpath={.clusters[0].name})
+
+    # bind the test service account to initial rights as the users have them
+    cat "tests/0-test-rights.yaml" | sed "s/{{SERVICE_ACCOUNT}}/$testAccount/g" \
+     | sed "s/{{SERVICE_ACCOUNT_NAMESPACE}}/$testAccountNamespace/g" \
+     | sed "s/{{BINDING_NAME}}/copsnamespace-creator-binding-$testAccount/g" \
+     | kubectl apply -f -
 }
 
-function should_deploy_valid_cns {
+#########################################################################
+#                           Assert helpers                              #
+#########################################################################
+function ensureAccessToNamespace {
+    namespaceName=$1
+
+    # we have to retry here because it might take a second or two to create the namespace
+    n=1
+    until [ $n -ge 15 ]
+    do
+        echo "Attempting to list basic namespace resources... Attempt $n out of 15."
+        kubectl get pods,svc,deploy -n $namespaceName && break
+        n=$[$n+1]
+        sleep 2
+    done
+
+    # last check after all attempts so that we can pipe the failure correctly
+    kubectl get pods,svc,deploy -n $namespaceName || fail "It was expected that the namespace setup is completed at this point."
+}
+
+#########################################################################
+#                              The Tests                                #
+#########################################################################
+
+function test_validDefinitions {
+    kubectl apply -f tests/valid-definitions
+}
+
+function test_invalidDefinitions {
+    hasFailed="no"
+
+    kubectl apply -f tests/invalid-definitions || hasFailed="yes"
+    
+    if [ $hasFailed == "no" ]; then
+        fail "Some of the invalid definition succeeded, which was unexpected!"
+    fi
+}
+
+# Tests following business cases:
+# - user can create a cops namespace and gain rights inside it
+# - all other users are denied access
+function test_shouldDeployEmpireCnsWithValidRbac {
     # Arrange
-    testAccount=$1
-    testAccountNamespace=$2
+    kubectl config use-context $darthVaderAccount
+    namespaceName="empire"
 
     # Act
-    cat "tests/1-valid-cns.yaml" | sed "s/{{SERVICE_ACCOUNT}}/$testAccount/g" \
-     | sed "s/{{SERVICE_ACCOUNT_NAMESPACE}}/$testAccountNamespace/g" \
+    cat "tests/1-empire-cns.yaml" | sed "s/{{SERVICE_ACCOUNT}}/$darthVaderAccount/g" \
+     | sed "s/{{SERVICE_ACCOUNT_NAMESPACE}}/$serviceAccountsNamespace/g" \
+     | sed "s/{{NAMESPACE}}/$namespaceName/g" \
      | kubectl apply -f -
 
     # Assert
-    kubectl get ns test-one
+    ensureAccessToNamespace $namespaceName
+
+    # no access for other accounts
+    kubectl config use-context $kyloRenAccount
+    
+    authOutput=$(kubectl auth can-i get pods -n $namespaceName) || success "Kylo ren didn't have access, which was expected :)"
+    
+    if [ $authOutput != "no" ]; then
+        fail "Listing pods as kylo ren should have failed!"
+    fi
 }
 
-function should_update_valid_cns {
-    # Arrange & Act
-    kubectl apply -f tests/2-updated-cns.yaml
+# Tests following business cases:
+# - namespace admin user edit the namespace and extend it with additional rbac
+function test_shouldUpdateEmpireCnsWithAdditionalRbac {
+    # Arrange
+    kubectl config use-context $darthVaderAccount
+    namespaceName="empire"
+
+    # Act
+    cat "tests/2-updated-cns.yaml" | sed "s/{{SERVICE_ACCOUNT}}/$darthVaderAccount/g" \
+     | sed "s/{{SERVICE_ACCOUNT_NAMESPACE}}/$testAccountNamespace/g" \
+     | sed "s/{{ADDITIONAL_SERVICE_ACCOUNT_NAMESPACE}}/$testAccountNamespace/g" \
+     | sed "s/{{ADDITIONAL_SERVICE_ACCOUNT}}/$kyloRenAccount/g" \
+     | sed "s/{{NAMESPACE}}/$namespaceName/g" \
+     | kubectl apply -f -
 
     # Assert
+    ensureAccessToNamespace $namespaceName # darth should still have access
+
+    # but kylo too
+    kubectl config use-context $kyloRenAccount
+    ensureAccessToNamespace $namespaceName
+
+    # to check the changes for user accounts, we can only ensure changes were done in RBAC. Real
+    # RBAC testing we cannot do because we cannot impersonate user accounts
+    
 }
+
+#########################################################################
+#                              Test runner                              #
+#########################################################################
 
 setupCluster $1 $2 $3
 
-testServiceAccount="cops-controller-test-user"
-testServiceAccountNamespace="default"
-setupTestServiceAccount $testServiceAccount $testServiceAccountNamespace
+setupTheEmpireServiceAccounts
 
-# bind the test service account to the only right required for the cops-controller, which is currently the right
-# to manage cops namespaces
-cat "tests/0-test-rights.yaml" | sed "s/{{SERVICE_ACCOUNT}}/$testServiceAccount/g" \
- | sed "s/{{SERVICE_ACCOUNT_NAMESPACE}}/$testServiceAccountNamespace/g" \
- | kubectl apply -f -
+# now we can run all the tests
+test_validDefinitions
+test_invalidDefinitions
+test_shouldDeployEmpireCnsWithValidRbac
+test_shouldUpdateEmpireCnsWithAdditionalRbac
 
-# switch to the test user
-kubectl config use-context $testServiceAccount
-
-should_deploy_valid_cns $testServiceAccount $testServiceAccountNamespace
-# should_update_valid_cns $testServiceAccount $testServiceAccountNamespace
+# error handling, invalid values -> check TODOs in code
+# test default peremissions, no access to default or kube-system
+# integrate into ci/cd

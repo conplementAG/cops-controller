@@ -3,6 +3,8 @@
 set -eo pipefail
 programname=$0
 
+UNIVERSAL_TEST_IDENTIFIED="cops-controller-component-tests"
+
 function usage {
     echo "usage: $programname [-r repository] [-t tag]"
     echo "  MAKE SURE YOU SPECIFY THE ARGUMENTS IN THE EXACT ORDER AS BELOW, THIS SCRIPT DOES NOT SUPPORT OUT OF ORDER ARGUMENTS!"
@@ -29,13 +31,51 @@ function usage {
     exit 1
 }
 
-exit_code=0  
-initialContext=$(kubectl config current-context)
+function colorecho {
+    RED="\033[0;31m"
+    GREEN="\033[0;32m"
+    YELLOW="\033[1;33m"
+    # ... ADD MORE COLORS
+    NC="\033[0m" # No Color
+
+    printf "${!1}${2} ${NC}\n"
+}
 
 # the cleanup function will be the exit point
-cleanup () {
+initialContext=$(kubectl config current-context)
+
+function cleanup {
+    exit_code=$?
     echo "Setting back the initial context $initialContext"
+    
     kubectl config use-context $initialContext
+    
+    echo "Deleting all cops namespaces for cleanup..."
+
+    namespaces=$(kubectl get cns -l tests=$UNIVERSAL_TEST_IDENTIFIED -o name)
+
+    if [ -n "$namespaces" ]; then 
+        kubectl delete $namespaces --ignore-not-found
+    fi
+
+    echo "Deleting all remaining RBAC rules..."
+    clusterRoles=$(kubectl get clusterroles -o name -l tests=$UNIVERSAL_TEST_IDENTIFIED)
+    clusterRoleBindings=$(kubectl get clusterrolebindings -o name -l tests=$UNIVERSAL_TEST_IDENTIFIED)
+
+    if [ -n "$clusterRoles" ]; then
+        kubectl delete $clusterRoles --ignore-not-found
+    fi
+
+    if [ -n "$clusterRoleBindings" ]; then
+        kubectl delete $clusterRoleBindings --ignore-not-found
+    fi
+
+    if [ $exit_code != 0 ]; then
+        colorecho "RED" "Tests failed, check for the last error occured."
+    else
+        colorecho "GREEN" "All tests succeeded."
+        colorecho "GREEN" "Stdout could contain some failure statements, but this is because we pipe everything to stdout, even the failure checks where we expect to fail."
+    fi
 
     exit $exit_code
 }
@@ -55,8 +95,5 @@ else
         trap cleanup EXIT ERR INT TERM
 
         . ./tests/tests.sh $repository $tag $5
-
-        # set the exit_code with the real result, used when cleanup is called
-        exit_code=$?
     fi 
 fi

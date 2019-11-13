@@ -1,0 +1,14 @@
+apiVersion: coreops.conplement.cloud/v1
+kind: CopsNamespace
+metadata:
+  name: {{NAMESPACE}}
+  labels: 
+    tests: cops-controller-component-tests
+spec:
+  namespaceAdminUsers:
+  - Test.User@conplement.de
+  - Third.User@conplement.de # remove one user, add another two
+  - Fourth.User@conplement.de
+  namespaceAdminServiceAccounts:
+  - {{SERVICE_ACCOUNT}}.{{SERVICE_ACCOUNT_NAMESPACE}}
+  - {{ADDITIONAL_SERVICE_ACCOUNT}}.{{ADDITIONAL_SERVICE_ACCOUNT_NAMESPACE}}

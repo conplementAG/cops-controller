@@ -1,7 +1,9 @@
 apiVersion: coreops.conplement.cloud/v1
 kind: CopsNamespace
 metadata:
-  name: test-one
+  name: {{NAMESPACE}}
+  labels: 
+    tests: cops-controller-component-tests
 spec:
   namespaceAdminUsers:
   - Test.User@conplement.de

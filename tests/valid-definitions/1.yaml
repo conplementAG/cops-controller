@@ -1,0 +1,13 @@
+apiVersion: coreops.conplement.cloud/v1
+kind: CopsNamespace
+metadata:
+  name: test-valid-ns-1-typical-with-non-existing-sa
+  labels: 
+    tests: cops-controller-component-tests
+spec:
+  namespaceAdminUsers:
+  - Test.User@conplement.de
+  - Second.User@conplement.de
+  namespaceAdminServiceAccounts:
+  - default.default # should work with existing sa
+  - notyetthere.default # but also with non-existing
