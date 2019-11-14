@@ -113,7 +113,7 @@ function expectApplyToFail {
 #                              The Tests                                #
 #########################################################################
 
-function test_noAccessExceptCnsGetListCreate {
+function test_noAccessPerDefault {
     logTestStarted ${FUNCNAME[0]}
 
     kubectl config use-context $darthVaderAccount
@@ -225,9 +225,8 @@ setupCluster "$1" "$2" "$3"
 setupTheEmpireServiceAccounts
 
 # now we can run all the tests
-test_noAccessExceptCnsGetListCreate # this test has to run first
+test_noAccessPerDefault # this test has to run first
 
-# following tests should run in any order
 test_validDefinitions
 test_invalidDefinitions
 test_shouldDeployEmpireCnsWithValidRbac
