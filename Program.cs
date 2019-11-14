@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
-using Serilog.Formatting.Elasticsearch;
+using Serilog.Formatting.Json;
 
 namespace ConplementAG.CopsController
 {
@@ -18,7 +18,7 @@ namespace ConplementAG.CopsController
                 {
                     config.Enrich.FromLogContext();
                     config.MinimumLevel.Debug();
-                    config.WriteTo.Console(new ElasticsearchJsonFormatter());
+                    config.WriteTo.Console(new JsonFormatter());
                 })
                 .UseStartup<Startup>();
     }

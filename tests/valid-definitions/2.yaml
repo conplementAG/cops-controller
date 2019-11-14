@@ -1,0 +1,10 @@
+apiVersion: coreops.conplement.cloud/v1
+kind: CopsNamespace
+metadata:
+  name: test-valid-ns-2-only-users
+  labels: 
+    tests: cops-controller-component-tests
+spec:
+  namespaceAdminUsers: # should work without service account which are optional
+  - Test.User@conplement.de
+  - Second.User@conplement.de

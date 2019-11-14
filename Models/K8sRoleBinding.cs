@@ -20,7 +20,7 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("roleRef")]
         public K8sRoleRef RoleRef { get; set; }
 
-        public static K8sRoleBinding NamespaceFullAccess(string namespacename, string[] users)
+        public static K8sRoleBinding NamespaceFullAccess(string namespacename, string[] users, CopsAdminServiceAccountSpec[] serviceAccounts)
         {
             if (string.IsNullOrEmpty(namespacename))
             {
@@ -32,15 +32,26 @@ namespace ConplementAG.CopsController.Models
                 throw new System.ArgumentNullException(nameof(users));
             }
 
+            // this is the binding for admin users to get full access inside a cops namespace. The cluster role itself is 
+            // not managed by the controller since it is a static resource deployed with rest of the static resources 
+            // (check the Helm chart)
             var roleBinding = new K8sRoleBinding
             {
                 Kind = "RoleBinding",
                 ApiVersion = "rbac.authorization.k8s.io/v1",
-                Metadata = new K8sMetadata { Name = $"copsnamespace-full-access-rolebinding", Namespace = namespacename },
-                RoleRef = new K8sRoleRef("ClusterRole", "copsnamespace-full-access-role", "rbac.authorization.k8s.io")
+                Metadata = new K8sMetadata { Name = $"copsnamespace-user", Namespace = namespacename },
+                RoleRef = new K8sRoleRef("ClusterRole", "copsnamespace-user", "rbac.authorization.k8s.io")
             };
 
-            var subjects = users.ToList().Select(user => { return new K8sUserSubjectItem(user, "rbac.authorization.k8s.io"); }).ToList<K8sSubjectBaseItem>();
+            var subjects = users.ToList()
+                    .Select(user => { return new K8sUserSubjectItem(user, "rbac.authorization.k8s.io"); }).ToList<K8sSubjectBaseItem>()
+                .Concat(serviceAccounts.ToList()
+                    .Select(sa => 
+                    {
+                        return new K8sServiceAccountSubjectItem(sa.ServiceAccount, sa.Namespace); 
+                    }).ToList<K8sSubjectBaseItem>()
+                );
+
             roleBinding.Subjects = subjects.ToArray();
 
             return roleBinding;
@@ -63,43 +74,6 @@ namespace ConplementAG.CopsController.Models
             Kind = kind;
             Name = name;
             ApiGroup = apigroup;
-        }
-    }
-
-    public abstract class K8sSubjectBaseItem
-    {
-        [JsonProperty("kind")]
-        public string Kind { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        public K8sSubjectBaseItem(string kind, string name)
-        {
-            Kind = kind;
-            Name = name;
-        }
-    }
-
-    public class K8sUserSubjectItem : K8sSubjectBaseItem
-    {
-        [JsonProperty("apiGroup")]
-        public string ApiGroup { get; set; }
-
-        public K8sUserSubjectItem(string name, string apigroup) : base("User", name)
-        {
-            ApiGroup = apigroup;
-        }
-    }
-
-    public class K8sServiceAccountSubjectItem : K8sSubjectBaseItem
-    {
-        [JsonProperty("namespace")]
-        public string Namespace { get; set; }
-
-        public K8sServiceAccountSubjectItem(string name, string @namespace) : base("ServiceAccount", name)
-        {
-            Namespace = @namespace;
         }
     }
 }

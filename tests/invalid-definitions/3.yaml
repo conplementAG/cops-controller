@@ -1,0 +1,12 @@
+apiVersion: coreops.conplement.cloud/v1
+kind: CopsNamespace
+metadata:
+  name: test-invalid-ns-3-only-with-sas
+  labels: 
+    tests: cops-controller-component-tests
+spec:
+  namespaceAdminServiceAccounts:
+  - serviceAccount: account1
+    namespace: custom
+  - serviceAccount: account2
+    namespace: custom

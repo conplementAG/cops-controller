@@ -1,0 +1,6 @@
+apiVersion: coreops.conplement.cloud/v1
+kind: CopsNamespace
+metadata:
+  name: test-invalid-ns-1-without-spec
+  labels: 
+    tests: cops-controller-component-tests

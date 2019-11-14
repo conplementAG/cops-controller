@@ -1,0 +1,11 @@
+apiVersion: coreops.conplement.cloud/v1
+kind: CopsNamespace
+metadata:
+  name: test-invalid-ns-4-with-invalid-sa-formats-1
+  labels: 
+    tests: cops-controller-component-tests
+spec:
+  namespaceAdminUsers:
+  - User@conplement.de
+  namespaceAdminServiceAccounts:
+  - account1
