@@ -20,7 +20,7 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("roleRef")]
         public K8sRoleRef RoleRef { get; set; }
 
-        public static K8sRoleBinding NamespaceFullAccess(string namespacename, string[] users, string[] serviceAccounts)
+        public static K8sRoleBinding NamespaceFullAccess(string namespacename, string[] users, CopsAdminServiceAccountSpec[] serviceAccounts)
         {
             if (string.IsNullOrEmpty(namespacename))
             {
@@ -47,9 +47,8 @@ namespace ConplementAG.CopsController.Models
                     .Select(user => { return new K8sUserSubjectItem(user, "rbac.authorization.k8s.io"); }).ToList<K8sSubjectBaseItem>()
                 .Concat(serviceAccounts.ToList()
                     .Select(sa => 
-                    { 
-                        // TODO error handling
-                        return new K8sServiceAccountSubjectItem(sa.Split(".")[0], sa.Split(".")[1]); 
+                    {
+                        return new K8sServiceAccountSubjectItem(sa.ServiceAccount, sa.Namespace); 
                     }).ToList<K8sSubjectBaseItem>()
                 );
 

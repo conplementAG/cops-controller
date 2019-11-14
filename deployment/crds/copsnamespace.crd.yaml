@@ -31,8 +31,17 @@ spec:
                 type: string
             namespaceAdminServiceAccounts:
               description: |-
-                Array with all the namespace administrator service accounts. Service accounts need to be specified in the
-                accountname.namespace string format! (for example, myaccount.default)
+                Array with all the namespace administrator service accounts.
               type: array
               items:
-                type: string
+                type: object
+                required:
+                - serviceAccount
+                - namespace
+                properties:
+                  serviceAccount:
+                    description: |-
+                      Service account name
+                  namespace:
+                    description: |-
+                      Namespace where the service account is located

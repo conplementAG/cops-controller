@@ -10,5 +10,7 @@ spec:
   - Third.User@conplement.de # remove one user, add another two
   - Fourth.User@conplement.de
   namespaceAdminServiceAccounts:
-  - {{SERVICE_ACCOUNT}}.{{SERVICE_ACCOUNT_NAMESPACE}}
-  - {{ADDITIONAL_SERVICE_ACCOUNT}}.{{ADDITIONAL_SERVICE_ACCOUNT_NAMESPACE}}
+  - serviceAccount: {{SERVICE_ACCOUNT}}
+    namespace: {{SERVICE_ACCOUNT_NAMESPACE}}
+  - serviceAccount: {{ADDITIONAL_SERVICE_ACCOUNT}}
+    namespace: {{ADDITIONAL_SERVICE_ACCOUNT_NAMESPACE}}

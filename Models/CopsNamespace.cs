@@ -28,6 +28,15 @@ namespace ConplementAG.CopsController.Models
         public string[] NamespaceAdminUsers { get; set; }
 
         [JsonProperty("namespaceAdminServiceAccounts")]
-        public string[] NamespaceAdminServiceAccounts { get; set; }
+        public CopsAdminServiceAccountSpec[] NamespaceAdminServiceAccounts { get; set; }
+    }
+
+    public class CopsAdminServiceAccountSpec
+    {
+        [JsonProperty("serviceAccount")]
+        public string ServiceAccount { get; set; }
+
+        [JsonProperty("namespace")]
+        public string Namespace { get; set; }
     }
 }

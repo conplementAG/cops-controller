@@ -99,6 +99,16 @@ function ensureAccessToNamespace {
     kubectl get pods,svc,deploy -n $namespaceName || fail "It was expected that the namespace setup is completed at this point."
 }
 
+function expectApplyToFail {
+    hasFailed="no"
+
+    kubectl apply -f $1 || hasFailed="yes"
+
+     if [ $hasFailed == "no" ]; then
+        fail "$1 succeeded, which was unexpected!"
+    fi
+}
+
 #########################################################################
 #                              The Tests                                #
 #########################################################################
@@ -132,11 +142,13 @@ function test_invalidDefinitions {
 
     hasFailed="no"
 
-    kubectl apply -f tests/invalid-definitions || hasFailed="yes"
-    
-    if [ $hasFailed == "no" ]; then
-        fail "Some of the invalid definition succeeded, which was unexpected!"
-    fi
+    expectApplyToFail "tests/invalid-definitions/1.yaml" 
+    expectApplyToFail "tests/invalid-definitions/2.yaml" 
+    expectApplyToFail "tests/invalid-definitions/3.yaml" 
+    expectApplyToFail "tests/invalid-definitions/4.yaml" 
+    expectApplyToFail "tests/invalid-definitions/5.yaml" 
+    expectApplyToFail "tests/invalid-definitions/6.yaml" 
+    expectApplyToFail "tests/invalid-definitions/7.yaml" 
 }
 
 # Tests following business cases:

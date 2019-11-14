@@ -18,14 +18,23 @@ spec:
   - Tenth.User@conplement.de
   - Eleventh.User@conplement.de
   namespaceAdminServiceAccounts:
-  - account1.default
-  - account2.default
-  - account3.default
-  - account4.default
-  - account5.default
-  - account6.default
-  - account1.custom
-  - account2.custom
-  - account3.custom
-  - account4.custom
-  - account5.custom
+  - serviceAccount: account1
+    namespace: default
+  - serviceAccount: account2
+    namespace: default
+  - serviceAccount: account3
+    namespace: default
+  - serviceAccount: account4
+    namespace: default
+  - serviceAccount: account5
+    namespace: default
+  - serviceAccount: account1
+    namespace: custom
+  - serviceAccount: account2
+    namespace: custom
+  - serviceAccount: account3
+    namespace: custom
+  - serviceAccount: account4
+    namespace: custom
+  - serviceAccount: account5
+    namespace: custom

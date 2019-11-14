@@ -6,5 +6,7 @@ metadata:
     tests: cops-controller-component-tests
 spec:
   namespaceAdminServiceAccounts:
-  - account1.default
-  - account2.default
+  - serviceAccount: account1
+    namespace: custom
+  - serviceAccount: account2
+    namespace: custom

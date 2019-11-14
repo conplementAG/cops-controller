@@ -9,5 +9,7 @@ spec:
   - Test.User@conplement.de
   - Second.User@conplement.de
   namespaceAdminServiceAccounts:
-  - default.default # should work with existing sa
-  - notyetthere.default # but also with non-existing
+  - serviceAccount: default # should work with existing sa
+    namespace: default
+  - serviceAccount: notyetthere # but also with non-existing
+    namespace: default
