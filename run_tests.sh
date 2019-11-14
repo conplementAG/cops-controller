@@ -42,13 +42,13 @@ function colorecho {
 }
 
 # the cleanup function will be the exit point
-initialContext=$(kubectl config current-context)
+INITIAL_CONTEXT=$(kubectl config current-context)
 
 function cleanup {
     exit_code=$?
-    echo "Setting back the initial context $initialContext"
+    echo "Setting back the initial context $INITIAL_CONTEXT"
     
-    kubectl config use-context $initialContext
+    kubectl config use-context $INITIAL_CONTEXT
     
     echo "Deleting all cops namespaces for cleanup..."
 

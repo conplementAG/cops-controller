@@ -6,7 +6,7 @@ metadata:
     tests: cops-controller-component-tests
 spec:
   namespaceAdminUsers:
-  - Test.User@conplement.de
+  - First.User@conplement.de
   - Second.User@conplement.de
   namespaceAdminServiceAccounts:
   - {{SERVICE_ACCOUNT}}.{{SERVICE_ACCOUNT_NAMESPACE}}

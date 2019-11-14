@@ -10,6 +10,10 @@ function success {
     colorecho "GREEN" "$1"
 }
 
+function logTestStarted {
+    colorecho "YELLOW" "$1"
+}
+
 #########################################################################
 #                               Globals                                 #
 #########################################################################
@@ -99,11 +103,33 @@ function ensureAccessToNamespace {
 #                              The Tests                                #
 #########################################################################
 
+function test_noAccessExceptCnsGetListCreate {
+    logTestStarted ${FUNCNAME[0]}
+
+    kubectl config use-context $darthVaderAccount
+
+    authOutput=$(kubectl auth can-i get pods -n default) || success "No access in default, good"
+    
+    if [ $authOutput != "no" ]; then
+        fail "Listing pods in default as darth vader should have failed!"
+    fi
+
+    authOutput=$(kubectl auth can-i get pods -n kube-system) || success "No access in kube-system, good"
+    
+    if [ $authOutput != "no" ]; then
+        fail "Listing pods in kube-system as darth vader should have failed!"
+    fi
+}
+
 function test_validDefinitions {
+    logTestStarted ${FUNCNAME[0]}
+
     kubectl apply -f tests/valid-definitions
 }
 
 function test_invalidDefinitions {
+    logTestStarted ${FUNCNAME[0]}
+
     hasFailed="no"
 
     kubectl apply -f tests/invalid-definitions || hasFailed="yes"
@@ -117,6 +143,8 @@ function test_invalidDefinitions {
 # - user can create a cops namespace and gain rights inside it
 # - all other users are denied access
 function test_shouldDeployEmpireCnsWithValidRbac {
+    logTestStarted ${FUNCNAME[0]}
+
     # Arrange
     kubectl config use-context $darthVaderAccount
     namespaceName="empire"
@@ -143,6 +171,8 @@ function test_shouldDeployEmpireCnsWithValidRbac {
 # Tests following business cases:
 # - namespace admin user edit the namespace and extend it with additional rbac
 function test_shouldUpdateEmpireCnsWithAdditionalRbac {
+    logTestStarted ${FUNCNAME[0]}
+
     # Arrange
     kubectl config use-context $darthVaderAccount
     namespaceName="empire"
@@ -164,7 +194,14 @@ function test_shouldUpdateEmpireCnsWithAdditionalRbac {
 
     # to check the changes for user accounts, we can only ensure changes were done in RBAC. Real
     # RBAC testing we cannot do because we cannot impersonate user accounts
+    kubectl config use-context $INITIAL_CONTEXT
+    users=$(kubectl get clusterrolebinding copsnamespace-editor-empire -o jsonpath={.subjects[*].name} --ignore-not-found)
     
+    echo "Found users: $users"
+
+    if [[ $users != *"First.User"* ]] || [[ $users == *"Second.User"* ]] || [[ $users != *"Fourth.User"* ]] || [[ $users != *"Third.User"* ]]; then
+        fail "Users were not updated correctly."
+    fi
 }
 
 #########################################################################
@@ -176,11 +213,10 @@ setupCluster "$1" "$2" "$3"
 setupTheEmpireServiceAccounts
 
 # now we can run all the tests
+test_noAccessExceptCnsGetListCreate # this test has to run first
+
+# following tests should run in any order
 test_validDefinitions
 test_invalidDefinitions
 test_shouldDeployEmpireCnsWithValidRbac
 test_shouldUpdateEmpireCnsWithAdditionalRbac
-
-# error handling, invalid values -> check TODOs in code
-# test default peremissions, no access to default or kube-system
-# integrate into ci/cd

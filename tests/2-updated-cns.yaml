@@ -6,7 +6,7 @@ metadata:
     tests: cops-controller-component-tests
 spec:
   namespaceAdminUsers:
-  - Test.User@conplement.de
+  - First.User@conplement.de
   - Third.User@conplement.de # remove one user, add another two
   - Fourth.User@conplement.de
   namespaceAdminServiceAccounts:
