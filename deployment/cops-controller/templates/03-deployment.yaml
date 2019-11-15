@@ -28,3 +28,7 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          env:
+          - name: Serilog:MinimumLevel
+            value: Error
+           
