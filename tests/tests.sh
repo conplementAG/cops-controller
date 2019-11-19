@@ -89,13 +89,22 @@ function ensureAccessToNamespace {
     n=1
     until [ $n -ge 15 ]
     do
-        echo "Attempting to list basic namespace resources... Attempt $n out of 15."
-        kubectl get pods,svc,deploy -n $namespaceName && break
+        echo "Attempting to test namespace access and list basic namespace resources... Attempt $n out of 15."
+        
+        hasFailed="no"
+        kubectl describe ns $namespaceName || hasFailed="yes"
+        kubectl get pods,svc,deploy -n $namespaceName || hasFailed="yes"
+
+        if [ $hasFailed == "no" ]; then
+            break
+        fi
+
         n=$[$n+1]
         sleep 2
     done
 
     # last check after all attempts so that we can pipe the failure correctly
+    kubectl describe ns $namespaceName || fail "It was expected that the namespace setup is completed at this point."
     kubectl get pods,svc,deploy -n $namespaceName || fail "It was expected that the namespace setup is completed at this point."
 }
 
@@ -135,6 +144,11 @@ function test_validDefinitions {
     logTestStarted ${FUNCNAME[0]}
 
     kubectl apply -f tests/valid-definitions
+
+    # names here have to match those in yaml files
+    ensureAccessToNamespace "test-valid-ns-1-typical-with-non-existing-sa"
+    ensureAccessToNamespace "test-valid-ns-2-only-users"
+    ensureAccessToNamespace "test-valid-ns-3-lot-of-users-and-sa"
 }
 
 function test_invalidDefinitions {
@@ -224,10 +238,14 @@ setupCluster "$1" "$2" "$3"
 
 setupTheEmpireServiceAccounts
 
-# now we can run all the tests
-test_noAccessPerDefault # this test has to run first
-
+# now we can run all the tests. Order here matters!
+# these two have to run first under the "admin" account, since we only check the "validity" of the definitions
 test_validDefinitions
 test_invalidDefinitions
+
+# this test should run before the others, where the account used is given more priviledges
+test_noAccessPerDefault 
+
+# these two are dependent on each other, because first one is create, second one is update
 test_shouldDeployEmpireCnsWithValidRbac
 test_shouldUpdateEmpireCnsWithAdditionalRbac

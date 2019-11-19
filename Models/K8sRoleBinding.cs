@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace ConplementAG.CopsController.Models
 {
@@ -20,16 +22,26 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("roleRef")]
         public K8sRoleRef RoleRef { get; set; }
 
-        public static K8sRoleBinding NamespaceFullAccess(string namespacename, string[] users, CopsAdminServiceAccountSpec[] serviceAccounts)
+        public static K8sRoleBinding NamespaceFullAccess(string namespacename, 
+            ICollection<string> users, ICollection<CopsAdminServiceAccountSpec> serviceAccounts)
         {
             if (string.IsNullOrEmpty(namespacename))
             {
-                throw new System.ArgumentException("Namespace was expected to be defined", nameof(namespacename));
+                throw new ArgumentException("Namespace was expected to be defined", nameof(namespacename));
             }
 
-            if (users is null)
+            if (users == null)
             {
-                throw new System.ArgumentNullException(nameof(users));
+                throw new ArgumentNullException(nameof(users));
+            }
+
+            if (serviceAccounts == null)
+            {
+                throw new ArgumentNullException(nameof(serviceAccounts));
+            }
+
+            if (!users.Any()) {
+                throw new ArgumentException("Users collection should not be empty since this expected as a mandatory parameter!");
             }
 
             // this is the binding for admin users to get full access inside a cops namespace. The cluster role itself is 
