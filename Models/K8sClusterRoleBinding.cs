@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace ConplementAG.CopsController.Models
 {
@@ -20,8 +22,27 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("roleRef")]
         public K8sRoleRef RoleRef { get; set; }
 
-        public static K8sClusterRoleBinding CopsNamespaceEditBinding(string namespacename, string[] users, CopsAdminServiceAccountSpec[] serviceAccounts)
+        public static K8sClusterRoleBinding CopsNamespaceEditBinding(string namespacename, ICollection<string> users, ICollection<CopsAdminServiceAccountSpec> serviceAccounts)
         {
+            if (string.IsNullOrEmpty(namespacename))
+            {
+                throw new ArgumentException("Namespace was expected to be defined", nameof(namespacename));
+            }
+
+            if (users == null)
+            {
+                throw new ArgumentNullException(nameof(users));
+            }
+
+            if (serviceAccounts == null)
+            {
+                throw new ArgumentNullException(nameof(serviceAccounts));
+            }
+
+            if (!users.Any()) {
+                throw new ArgumentException("Users collection should not be empty since this expected as a mandatory parameter!");
+            }
+
             var subjects = users.ToList()
                     .Select(user => { return new K8sUserSubjectItem(user, "rbac.authorization.k8s.io"); }).ToList<K8sSubjectBaseItem>()
                 .Concat(serviceAccounts.ToList()

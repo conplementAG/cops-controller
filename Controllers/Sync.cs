@@ -37,7 +37,15 @@ namespace ConplementAG.CopsController.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error handling CopsResource {CopsResourceKind}", value["parent"]["kind"]);
+                if (value != null && value["parent"] != null)
+                {
+                    var errorMessage = $"Error while handling Cops Resource { value["parent"]["kind"] }, { value["parent"]["metadata"]["name"] }";
+                    Log.Error(ex, errorMessage);
+                }
+                else
+                {
+                    Log.Error(ex, "Error while handling unknown resource type. Here is the entire value object dump: " + value);
+                }
             }
 
             return StatusCode((int)HttpStatusCode.InternalServerError);
