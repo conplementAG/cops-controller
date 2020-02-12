@@ -12,6 +12,8 @@ spec:
     singular: copsnamespace
     shortNames:
       - cns
+  subresources:
+    status: {}
   validation:
     openAPIV3Schema:
       required:

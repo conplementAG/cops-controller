@@ -23,11 +23,11 @@ function usage {
     echo "       - sudo install minikube /usr/local/bin/"
     echo "   2. The cluster has to have access to the docker registry with the pushed image. Either you push to a remote registry,"
     echo "      or you can use something like minikube docker-env to share the images on your machine."
-    echo "       Ubuntu with minikube instructions:"
-    echo "       - minikube start"
-    echo "       - import variables with eval from: minikube docker-env"
-    echo "       - docker build . -t cops-controller:latest"
-    echo "       - ./run_tests.sh --install-helm-and-cops-controller -r cops-controller -t latest"
+    echo "       Ubuntu with minikube instructions: "
+    echo "       - 'minikube start' "
+    echo "       - run 'minikube docker-env' and follow the instructions / outputed commands "
+    echo "       - docker build . -t cops-controller:latest "
+    echo "       - ./run_tests.sh --install-helm-and-cops-controller -r cops-controller -t latest "
     exit 1
 }
 
