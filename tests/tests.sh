@@ -108,6 +108,18 @@ function ensureAccessToNamespace {
     kubectl get pods,svc,deploy -n $namespaceName || fail "It was expected that the namespace setup is completed at this point."
 }
 
+function ensureAllResourcesAreSupported {
+    namespaceName=$1
+
+    # IMPORTANT
+    # you should not test custom CRD resources here, because that is an additional test dependency which might
+    # come in conflict with existing CRDs, depending on the cluster where this test is run
+    cat "tests/allowed-resources/rbac.yaml" | sed "s/{{NAMESPACE}}/$namespaceName/g" \
+     | kubectl apply -f -
+    cat "tests/allowed-resources/networking.yaml" | sed "s/{{NAMESPACE}}/$namespaceName/g" \
+     | kubectl apply -f -
+}
+
 function expectApplyToFail {
     hasFailed="no"
 
@@ -167,6 +179,7 @@ function test_invalidDefinitions {
 
 # Tests following business cases:
 # - user can create a cops namespace and gain rights inside it
+# - the rights are additionaly tested by deploying different sample k8s resources, which should all succeed
 # - all other users are denied access
 function test_shouldDeployEmpireCnsWithValidRbac {
     logTestStarted ${FUNCNAME[0]}
@@ -183,6 +196,7 @@ function test_shouldDeployEmpireCnsWithValidRbac {
 
     # Assert
     ensureAccessToNamespace $namespaceName
+    ensureAllResourcesAreSupported $namespaceName
 
     # no access for other accounts
     kubectl config use-context $kyloRenAccount

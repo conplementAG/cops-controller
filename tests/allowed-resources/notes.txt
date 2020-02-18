@@ -1,0 +1,1 @@
+Actually all the resources should be allowed to be deployed inside a namespace, so this is more of a collection of those that we actually test.
