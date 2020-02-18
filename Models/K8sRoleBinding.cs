@@ -52,7 +52,9 @@ namespace ConplementAG.CopsController.Models
                 Kind = "RoleBinding",
                 ApiVersion = "rbac.authorization.k8s.io/v1",
                 Metadata = new K8sMetadata { Name = $"copsnamespace-user", Namespace = namespacename },
-                RoleRef = new K8sRoleRef("ClusterRole", "copsnamespace-user", "rbac.authorization.k8s.io")
+                // the in-built clusterrole edit has all the api resources and CRDs aalways up to date,
+                // so we use that clusterrole instead of writing our own which is far more brittle
+                RoleRef = new K8sRoleRef("ClusterRole", "edit", "rbac.authorization.k8s.io")
             };
 
             var subjects = users.ToList()
