@@ -1,9 +1,9 @@
 ﻿using ConplementAG.CopsController.Services;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
 using System.Net;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ConplementAG.CopsController.Controllers
 {
@@ -18,10 +18,12 @@ namespace ConplementAG.CopsController.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]Newtonsoft.Json.Linq.JObject value)
+        public IActionResult Post([FromBody]JObject value)
         {
             try
             {
+                Log.Verbose("REQUEST===============================" + value.ToString(Newtonsoft.Json.Formatting.Indented));
+
                 var copsResource = CopsResourceFactory.Create(value);
                 var k8sResources = K8sResourceFactory.Create(copsResource);
 
@@ -32,7 +34,7 @@ namespace ConplementAG.CopsController.Controllers
                     }
                 );
 
-                Log.Debug("RESPONSE===============================" + response.ToString());
+                Log.Verbose("RESPONSE===============================" + response.ToString(Newtonsoft.Json.Formatting.Indented));
                 return Ok(response);
             }
             catch (Exception ex)
