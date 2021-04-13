@@ -25,7 +25,8 @@ namespace ConplementAG.CopsController.Services
                     copsNamespace.Spec.NamespaceAdminServiceAccounts ??  new List<CopsAdminServiceAccountSpec>().ToArray()),
                 K8sClusterRoleBinding.CopsNamespaceEditBinding(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers, 
                     copsNamespace.Spec.NamespaceAdminServiceAccounts ??  new List<CopsAdminServiceAccountSpec>().ToArray()),
-                K8sClusterRole.CopsNamespaceEdit(copsNamespace.Metadata.Name)
+                K8sClusterRole.CopsNamespaceEdit(copsNamespace.Metadata.Name),
+                K8SLimitRange.Default(copsNamespace.Metadata.Name)
             };
         }
     }

@@ -25,6 +25,10 @@ spec:
     resource: clusterroles
     updateStrategy:
       method: InPlace
+  - apiVersion: v1
+    resource: limitrange
+    updateStrategy:
+      method: InPlace
   hooks:
     sync:
       webhook:
