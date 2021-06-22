@@ -17,9 +17,18 @@ variables:
 
 steps:
 - script: |
-    docker build -t $(dockerId)/$(imageName) .
     docker login -u $(dockerUsername) -p $(dockerPassword)
+    docker build -t $(dockerId)/$(imageName) .
+  displayName: Build
+
+- script: |
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy --exit-code 0 --severity MEDIUM,HIGH --ignore-unfixed $(dockerId)/$(imageName)
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy --exit-code 1 --severity CRITICAL --ignore-unfixed $(dockerId)/$(imageName)
+  displayName: Scan
+
+- script: |
     docker push $(dockerId)/$(imageName)
+  displayName: Push
 
 - task: PublishBuildArtifacts@1
   inputs:
