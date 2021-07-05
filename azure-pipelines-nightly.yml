@@ -1,0 +1,32 @@
+name: $(imageName)
+
+schedules:
+- cron: "0 0 * * *"
+  displayName: Nightly build
+  branches:
+    include:
+    - master
+  always: true
+
+resources:
+  pipelines:
+    - pipeline: cops-controller
+      source: conplementAG.cops-controller
+      trigger: 
+        branches:
+          include:
+            - master
+
+pool:
+  vmImage: 'ubuntu-20.04'
+
+variables:
+  dockerId: conplementag
+  imageBaseName: cops-controller
+  imageName: '$(imageBaseName):$(resources.pipeline.cops-controller.runName)-dev'
+
+steps:
+- script: |
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy --exit-code 0 --severity MEDIUM,HIGH --ignore-unfixed $(dockerId)/$(imageName)
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy --exit-code 1 --severity CRITICAL --ignore-unfixed $(dockerId)/$(imageName)
+  displayName: Scan
