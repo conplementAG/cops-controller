@@ -1,7 +1,4 @@
 # cops controller
-
-[![Build Status](https://cpgithub.visualstudio.com/GitHubPipelines/_apis/build/status/conplementAG.cops-controller?branchName=master)](https://cpgithub.visualstudio.com/GitHubPipelines/_build/latest?definitionId=10&branchName=master)
-
 ## Introduction
 
 This is the Kubernetes Controller implementation for Conplement CoreOps specific Kubernetes extensions. Can be seen as a backend to the companion project [copsctl](https://github.com/conplementAG/copsctl)
