@@ -1,10 +1,9 @@
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: copsnamespaces.coreops.conplement.cloud
 spec:
   group: coreops.conplement.cloud
-  version: v1
   scope: Cluster
   names:
     kind: CopsNamespace
@@ -12,38 +11,40 @@ spec:
     singular: copsnamespace
     shortNames:
       - cns
-  subresources:
-    status: {}
-  validation:
-    openAPIV3Schema:
-      required:
-      - spec
-      properties:
-        spec:
-          required:
-          - namespaceAdminUsers
-          properties:
-            namespaceAdminUsers:
-              description: |-
-                Array with all the namespace administrator users. You need to reference the administrators by specifying 
-                their Conplement Azure AD User IDs, which is usually in the form of 
-                Firstname.Lastname@conplement.de (notice the capital letters!)
-              type: array
-              items:
-                type: string
-            namespaceAdminServiceAccounts:
-              description: |-
-                Array with all the namespace administrator service accounts.
-              type: array
-              items:
-                type: object
-                required:
-                - serviceAccount
-                - namespace
-                properties:
-                  serviceAccount:
-                    description: |-
-                      Service account name
-                  namespace:
-                    description: |-
-                      Namespace where the service account is located
+  versions: 
+  - name: v1
+    served: true
+    storage: true
+    schema: 
+      openAPIV3Schema:
+        required:
+        - spec
+        properties:
+          spec:
+            required:
+            - namespaceAdminUsers
+            properties:
+              namespaceAdminUsers:
+                description: |-
+                  Array with all the namespace administrator users. You need to reference the administrators by specifying 
+                  their Conplement Azure AD User IDs, which is usually in the form of 
+                  Firstname.Lastname@conplement.de (notice the capital letters!)
+                type: array
+                items:
+                  type: string
+              namespaceAdminServiceAccounts:
+                description: |-
+                  Array with all the namespace administrator service accounts.
+                type: array
+                items:
+                  type: object
+                  required:
+                  - serviceAccount
+                  - namespace
+                  properties:
+                    serviceAccount:
+                      description: |-
+                        Service account name
+                    namespace:
+                      description: |-
+                        Namespace where the service account is located
