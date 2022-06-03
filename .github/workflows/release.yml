@@ -1,0 +1,22 @@
+name: 'release'
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: helm
+          package-name: cops-controller
+      - uses: actions/checkout@v3
+      - name: Build & Push Docker image
+        run: |
+          docker build . --file Dockerfile --tag conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
+          docker push conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
+  
+
