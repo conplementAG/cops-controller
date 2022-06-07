@@ -32,8 +32,7 @@ jobs:
         uses: ncipollo/release-action@v1
         if: ${{ steps.release.outputs.release_created }}
         with:
-          artifacts: "release.tar.gz,foo/*.txt"
-          bodyFile: "body.md"
+          artifacts: "deployment/**/*.*"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
   
