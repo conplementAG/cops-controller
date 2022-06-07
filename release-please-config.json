@@ -11,6 +11,7 @@
       "extraFiles": [
         "deployment/cops-controller/Chart.yaml"
       ]
-    }
+    },
+    "deployment/crds": {}
   }
 }
