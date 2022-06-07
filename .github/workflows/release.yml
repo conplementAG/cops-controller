@@ -13,10 +13,10 @@ jobs:
         id: release
         with:
           release-type: helm
-          path: deployment/cops-controller
           package-name: cops-controller          
           extra-files: |
-            values.yaml
+            deployment/cops-controller/Chart.yaml
+            deployment/cops-controller/values.yaml
       - name: Login to Docker Hub
         if: ${{ steps.release.outputs.release_created }}
         uses: docker/login-action@v2
@@ -28,5 +28,13 @@ jobs:
         run: |
           docker build . --file Dockerfile --tag conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
           docker push conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
+      - name: Create Helm Release
+        uses: ncipollo/release-action@v1
+        if: ${{ steps.release.outputs.release_created }}
+        with:
+          artifacts: "release.tar.gz,foo/*.txt"
+          bodyFile: "body.md"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
   
 
