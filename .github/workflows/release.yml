@@ -13,7 +13,7 @@ jobs:
         with:
           release-type: helm
           package-name: cops-controller
-          path: ./deployment
+          path: deployment
           extra-files: |
             Chart.yaml
       - uses: actions/checkout@v3
