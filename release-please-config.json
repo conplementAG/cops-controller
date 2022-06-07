@@ -1,0 +1,16 @@
+{
+  "packages": {
+    "deployment/cops-controller": {
+      "releaseType": "helm",
+      "draft": false,
+      "prerelease": false,
+      "bumpMinorPreMajor": false,
+      "bumpPatchForMinorPreMajor": false,
+      "changelogPath": "CHANGELOG.md",
+      "versioning": "default",
+      "extraFiles": [
+        "deployment/cops-controller/Chart.yaml"
+      ]
+    }
+  }
+}
