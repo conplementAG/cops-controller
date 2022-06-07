@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/conplementAG/cops-controller/compare/v0.6.0...v0.6.1) (2022-06-07)
+
+
+### Bug Fixes
+
+* dynamic chart version ([eccecdb](https://github.com/conplementAG/cops-controller/commit/eccecdb60fa73a609295613e4e3fbba83dfa2ff0))
+
 ## [0.6.0](https://github.com/conplementAG/cops-controller/compare/v0.5.2...v0.6.0) (2022-06-07)
 
 
