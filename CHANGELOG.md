@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/conplementAG/cops-controller/compare/v0.5.1...v0.5.2) (2022-06-07)
+
+
+### Bug Fixes
+
+* allow update and replace ([9235601](https://github.com/conplementAG/cops-controller/commit/92356013cd0653b24b4f409e2f7c08584b382af0))
+
 ## [0.5.1](https://github.com/conplementAG/cops-controller/compare/v0.5.0...v0.5.1) (2022-06-07)
 
 
