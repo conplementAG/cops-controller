@@ -1,5 +1,3 @@
 {
-  ".": "0.0.0",
-  "deployment/cops-controller": "0.0.0",
-  "deployment/crds": "0.0.0"
+  "deployment": "0.0.0"
 }

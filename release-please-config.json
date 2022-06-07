@@ -1,10 +1,6 @@
 {
   "packages": {
-    ".": {
-      "releaseType": "simple",
-      "targetBranch": "master"
-    },
-    "deployment/cops-controller": {
+    "deployment": {
       "releaseType": "helm",
       "targetBranch": "master",
       "draft": false,
@@ -16,10 +12,6 @@
       "extraFiles": [
         "deployment/cops-controller/Chart.yaml"
       ]
-    },
-    "deployment/crds": {
-      "releaseType": "simple",
-      "targetBranch": "master"
     }
   }
 }
