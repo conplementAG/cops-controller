@@ -13,6 +13,7 @@ jobs:
         id: release
         with:
           release-type: helm
+          path: deployment/cops-controller
           package-name: cops-controller          
           extra-files: |
             deployment/cops-controller/Chart.yaml
