@@ -1,6 +1,8 @@
 {
   "packages": {
-    ".": {},
+    ".": {
+      "releaseType": "simple"
+    },
     "deployment/cops-controller": {
       "releaseType": "helm",
       "draft": false,
@@ -13,6 +15,8 @@
         "deployment/cops-controller/Chart.yaml"
       ]
     },
-    "deployment/crds": {}
+    "deployment/crds": {
+      "releaseType": "simple"
+    }
   }
 }
