@@ -33,6 +33,8 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         with:
           artifacts: "deployment/**/*.*"
+          allowUpdates: true
+          replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
   
