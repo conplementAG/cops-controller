@@ -1,3 +1,3 @@
 image:
   repository: conplementag/cops-controller
-  tag: 0.5.0 # x-release-please-version
+  tag: 0.5.1 # x-release-please-version
