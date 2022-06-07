@@ -28,14 +28,16 @@ jobs:
         run: |
           docker build . --file Dockerfile --tag conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
           docker push conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
-      - name: Create Helm Release
-        uses: ncipollo/release-action@v1
+      - name: Install Helm
         if: ${{ steps.release.outputs.release_created }}
+        uses: azure/setup-helm@v1
         with:
-          artifacts: "deployment/**/*.*"
-          allowUpdates: true
-          replacesArtifacts: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
+          version: v3.8.1
+      - name: Run chart-releaser
+        if: ${{ steps.release.outputs.release_created }}
+        uses: helm/chart-releaser-action@v1.4.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          charts_dir: deployments
   
 
