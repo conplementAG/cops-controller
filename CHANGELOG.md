@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/conplementAG/cops-controller/compare/v0.6.1...v0.6.2) (2022-06-07)
+
+
+### Bug Fixes
+
+* adapt release ([60bd80d](https://github.com/conplementAG/cops-controller/commit/60bd80dd74e66480e29c38a2c31814614af02240))
+
 ## [0.6.1](https://github.com/conplementAG/cops-controller/compare/v0.6.0...v0.6.1) (2022-06-07)
 
 
