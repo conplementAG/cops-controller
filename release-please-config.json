@@ -1,5 +1,6 @@
 {
   "packages": {
+    ".": {},
     "deployment/cops-controller": {
       "releaseType": "helm",
       "draft": false,
