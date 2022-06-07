@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/conplementAG/cops-controller/compare/v0.4.1...v0.5.0) (2022-06-07)
+
+
+### Features
+
+* add helm release ([129431d](https://github.com/conplementAG/cops-controller/commit/129431d788a9b1273564080c9f88c0de57fb667b))
+
 ## [0.4.0](https://github.com/conplementAG/cops-controller/compare/v0.3.0...v0.4.0) (2022-06-07)
 
 
