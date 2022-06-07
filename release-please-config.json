@@ -1,10 +1,12 @@
 {
   "packages": {
     ".": {
-      "releaseType": "simple"
+      "releaseType": "simple",
+      "targetBranch": "master"
     },
     "deployment/cops-controller": {
       "releaseType": "helm",
+      "targetBranch": "master",
       "draft": false,
       "prerelease": false,
       "bumpMinorPreMajor": false,
@@ -16,7 +18,8 @@
       ]
     },
     "deployment/crds": {
-      "releaseType": "simple"
+      "releaseType": "simple",
+      "targetBranch": "master"
     }
   }
 }
