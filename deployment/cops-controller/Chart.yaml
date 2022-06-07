@@ -1,4 +1,4 @@
 apiVersion: v2
 name: cops-controller
 description: CoreOps Controller Helm Chart
-version: 0.4.1
+version: 0.4.1 # x-release-please-version
