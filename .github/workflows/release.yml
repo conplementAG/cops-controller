@@ -30,23 +30,13 @@ jobs:
         run: |
           docker build . --file Dockerfile --tag conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
           docker push conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
-      - name: Configure Git
-        if: ${{ steps.release.outputs.release_created }}
+      - name: Download chart releaser
         run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-      - name: Install Helm
-        if: ${{ steps.release.outputs.release_created }}
-        uses: azure/setup-helm@v1
-        with:
-          version: v3.8.1
-      - name: Run chart-releaser
-        if: ${{ steps.release.outputs.release_created }}
-        uses: helm/chart-releaser-action@v1.4.0
-        with: 
-          charts_dir: deployments
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          CR_SKIP_EXISTING: false
-  
-
+          curl -sSLo hcr.tar.gz "https://github.com/pete911/hcr/releases/download/v0.0.5/hcr_0.0.5_linux_amd64.tar.gz"
+          tar -xzf hcr.tar.gz
+          rm -f hcr.tar.gz
+      - name: Package and release chart
+        run: |
+          git config user.email "gh-action@users.noreply.github.com"
+          git config user.name "gh-action"
+          ./hcr -token "${{ secrets.GITHUB_TOKEN }}" -charts-dir deployment/cops-controller
