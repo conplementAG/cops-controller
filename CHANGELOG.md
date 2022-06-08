@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.4](https://github.com/conplementAG/cops-controller/compare/v0.6.3...v0.6.4) (2022-06-08)
+
+
+### Bug Fixes
+
+* add github actor ([4d0a6c7](https://github.com/conplementAG/cops-controller/commit/4d0a6c7a9860febf11d4fc0fd5a5c43e7bd79d31))
+* release pipeline ([a8d51e3](https://github.com/conplementAG/cops-controller/commit/a8d51e3dfc986497e8d8723aa0ef2217192e0c71))
+
 ## [0.6.3](https://github.com/conplementAG/cops-controller/compare/v0.6.2...v0.6.3) (2022-06-07)
 
 
