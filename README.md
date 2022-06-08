@@ -42,7 +42,3 @@ Install the Azure DevSpaces CLI and run:
 
 Hints on development:
  - When running inside Kubernetes, follow both metacontroller and this container logs. Metacontroller logs can be reached via `kubectl logs metacontroller-0 -n metacontroller -f` or a similar command. 
-
-## Creating a new release
-
-Release is created by starting the Azure DevOps release pipeline. Follow the instructions documented in the pipeline itself.
