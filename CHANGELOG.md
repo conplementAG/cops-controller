@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.5](https://github.com/conplementAG/cops-controller/compare/v0.6.4...v0.6.5) (2022-06-08)
+
+
+### Bug Fixes
+
+* switch to simple helm chart releaser ([319293d](https://github.com/conplementAG/cops-controller/commit/319293d2cee36518d5dea60f4ac1f8aa31e35cc4))
+
 ## [0.6.4](https://github.com/conplementAG/cops-controller/compare/v0.6.3...v0.6.4) (2022-06-08)
 
 
