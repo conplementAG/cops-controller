@@ -19,10 +19,12 @@ spec:
       openAPIV3Schema:
         required:
         - spec
+        type: object
         properties:
           spec:
             required:
             - namespaceAdminUsers
+            type: object
             properties:
               namespaceAdminUsers:
                 description: |-
@@ -43,8 +45,10 @@ spec:
                   - namespace
                   properties:
                     serviceAccount:
+                      type: string
                       description: |-
                         Service account name
                     namespace:
+                      type: string
                       description: |-
                         Namespace where the service account is located
