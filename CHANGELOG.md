@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.1.0](https://github.com/conplementAG/cops-controller/compare/1.0.0...v1.1.0) (2022-06-28)
+
+
+### Features
+
+* add trivy repo scanning ([557df0a](https://github.com/conplementAG/cops-controller/commit/557df0a6baf8cf50e29f2d75c24745f6f9659548))
+* create build with triviy scan ([eaa9c5a](https://github.com/conplementAG/cops-controller/commit/eaa9c5a55c69bda71d95aa1518562634112a0b05))
+* enable code scanning ([ab37d00](https://github.com/conplementAG/cops-controller/commit/ab37d007b29f7f7f1c4199c703abfb6405bead75))
+* enable nuget package.lock.json to enable scanning with trivy ([6295027](https://github.com/conplementAG/cops-controller/commit/6295027bbadec30befd08f724974c9396b3fee71))
+* upload trivy scan results to github security tab ([8973220](https://github.com/conplementAG/cops-controller/commit/8973220e7cbf0cd7c344501ac140cf7048822604))
+
+
+### Bug Fixes
+
+* adapt trivy output for upload ([e29eb51](https://github.com/conplementAG/cops-controller/commit/e29eb514020725b6296c4c5b97c82c0a8bd71e96))
+* typo ([0cefd97](https://github.com/conplementAG/cops-controller/commit/0cefd972637923dc5a459bb3abae78310e2ab0f5))
+* upgrade crd to current schema ([d0ca571](https://github.com/conplementAG/cops-controller/commit/d0ca571d5d770e67fc449283b9dfc1912b2facb1))
+
 ## 1.0.0 (2022-06-08)
 
 
