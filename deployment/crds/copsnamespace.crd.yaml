@@ -52,3 +52,6 @@ spec:
                       type: string
                       description: |-
                         Namespace where the service account is located
+    subresources:
+      # status enables the status subresource.
+      status: {}
