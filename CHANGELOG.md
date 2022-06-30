@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/conplementAG/cops-controller/compare/1.1.0...v1.1.1) (2022-06-30)
+
+
+### Bug Fixes
+
+* enable subresource status ([6391d8a](https://github.com/conplementAG/cops-controller/commit/6391d8a16b08a9cdce39bfaaabe59737e15135ab))
+
 ## [1.1.0](https://github.com/conplementAG/cops-controller/compare/1.0.0...v1.1.0) (2022-06-28)
 
 
