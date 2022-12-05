@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/conplementAG/cops-controller/compare/1.1.1...v1.2.0) (2022-12-05)
+
+
+### Features
+
+* upgrade .net and all dependencies ([0b898d1](https://github.com/conplementAG/cops-controller/commit/0b898d1433cb9fbaf9fa94616daa5ced199f8031))
+
 ## [1.1.1](https://github.com/conplementAG/cops-controller/compare/1.1.0...v1.1.1) (2022-06-30)
 
 
