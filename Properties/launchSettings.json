@@ -1,13 +1,4 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:33197",
-      "sslPort": 44396
-    }
-  },
-  "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
@@ -33,6 +24,26 @@
       "resourceGroup": "dbio2-neu-cops-rg",
       "aksName": "dbio2-neu-cops-aks",
       "subscriptionId": "d2474dd2-a3b9-47df-a489-14a4ea3056a8"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "launchBrowser": true,
+      "launchUrl": "https://localhost:5001/api/sync",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5000",
+        "Serilog__MinimumLevel": "Verbose"
+      },
+      "distributionName": ""
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:33197",
+      "sslPort": 44396
     }
   }
 }

@@ -29,6 +29,9 @@ namespace ConplementAG.CopsController.Models
 
         [JsonProperty("namespaceAdminServiceAccounts")]
         public CopsAdminServiceAccountSpec[] NamespaceAdminServiceAccounts { get; set; }
+
+        [JsonProperty("project")]
+        public CopsProjectInformations Project { get; set; }
     }
 
     public class CopsAdminServiceAccountSpec
@@ -38,5 +41,14 @@ namespace ConplementAG.CopsController.Models
 
         [JsonProperty("namespace")]
         public string Namespace { get; set; }
+    }
+
+    public class CopsProjectInformations
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("costcenter")]
+        public string CostCenter { get; set; }
     }
 }

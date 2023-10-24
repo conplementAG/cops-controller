@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ConplementAG.CopsController.Models
 {
@@ -13,11 +14,11 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("metadata")]
         public K8sNamespaceMetadata Metadata { get; set; }
 
-        public K8sNamespace(string name)
+        public K8sNamespace(string name, string projectName, string projectCostCenter)
         {
             Kind = "Namespace";
             ApiVersion = "v1";
-            Metadata = new K8sNamespaceMetadata { Name = name };
+            Metadata = new K8sNamespaceMetadata(name, projectName, projectCostCenter);
         }
     }
 
@@ -25,5 +26,18 @@ namespace ConplementAG.CopsController.Models
     {
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("labels")]
+        public Dictionary<string, string> Labels { get; set; }
+
+        public K8sNamespaceMetadata(string name, string projectName, string projectCostCenter)
+        {
+            Name= name;
+            Labels = new Dictionary<string, string>
+            {
+                { "conplement.de/projectname", projectName },
+                { "conplement.de/projectcostcenter", projectCostCenter }
+            };
+        }
     }
 }
