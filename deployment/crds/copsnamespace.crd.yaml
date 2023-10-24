@@ -14,7 +14,9 @@ spec:
   versions: 
   - name: v1
     served: true
-    storage: true
+    storage: false
+    deprecated: true
+    deprecationWarning: "coreops.conplement.cloud/v1 CopsNamespace is deprecated; migrate to coreops.conplement.cloud/v1 CopsNamespace by adding project informations; https://wiki.conplement.de/x/hoeOBg"
     schema: 
       openAPIV3Schema:
         required:
@@ -55,3 +57,66 @@ spec:
     subresources:
       # status enables the status subresource.
       status: {}
+  - name: v2
+    served: true
+    storage: true
+    schema: 
+      openAPIV3Schema:
+        required:
+        - spec
+        type: object
+        properties:
+          spec:
+            required:
+            - namespaceAdminUsers
+            type: object
+            properties:
+              namespaceAdminUsers:
+                description: |-
+                  Array with all the namespace administrator users. You need to reference the administrators by specifying 
+                  their Conplement Azure AD User IDs, which is usually in the form of 
+                  Firstname.Lastname@conplement.de (notice the capital letters!)
+                type: array
+                items:
+                  type: string
+              namespaceAdminServiceAccounts:
+                description: |-
+                  Array with all the namespace administrator service accounts.
+                type: array
+                items:
+                  type: object
+                  required:
+                  - serviceAccount
+                  - namespace
+                  properties:
+                    serviceAccount:
+                      type: string
+                      description: |-
+                        Service account name
+                    namespace:
+                      type: string
+                      description: |-
+                        Namespace where the service account is located
+              project:
+                description: |-
+                    Project related informations 
+                type: object
+                required: 
+                - name
+                - costcenter
+                properties:
+                    name:
+                        type: string
+                        description: |-
+                            Name of the project hosted within namespace
+                    costcenter:
+                        type: string
+                        description: |-
+                            Costcenter of the project hosted with namespace
+    subresources:
+      # status enables the status subresource.
+      status: {}
+  conversion:
+    # None conversion assumes the same schema for all versions and only sets the apiVersion
+    # field of custom resources to the proper value
+    strategy: None  

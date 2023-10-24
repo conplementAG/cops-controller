@@ -6,7 +6,7 @@ metadata:
 spec:
   generateSelector: true
   parentResource:
-    apiVersion: coreops.conplement.cloud/v1
+    apiVersion: coreops.conplement.cloud/v2
     resource: copsnamespaces
   childResources:
   - apiVersion: v1
