@@ -1,0 +1,25 @@
+apiVersion: coreops.conplement.cloud/v2
+kind: CopsNamespace
+metadata:
+  name: test-valid-ns-4-version2
+  labels: 
+    tests: cops-controller-component-tests
+spec:
+  namespaceAdminUsers: # should work with a lot of users and service accounts
+  - Test.User@conplement.de
+  - Second.User@conplement.de
+  - Third.User@conplement.de
+  - Fourth.User@conplement.de
+  - Fifth.User@conplement.de
+  - Sixth.User@conplement.de
+  - Seventh.User@conplement.de
+  - Eight.User@conplement.de
+  - Ninth.User@conplement.de
+  - Tenth.User@conplement.de
+  - Eleventh.User@conplement.de
+  namespaceAdminServiceAccounts:
+  - serviceAccount: account1
+    namespace: default
+  project:
+    name: testing
+    costcenter: "42"
