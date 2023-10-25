@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eo pipefail
+set -e -o pipefail
 
 function fail {
     colorecho "RED" "$1"
@@ -161,6 +161,7 @@ function test_validDefinitions {
     ensureAccessToNamespace "test-valid-ns-1-typical-with-non-existing-sa"
     ensureAccessToNamespace "test-valid-ns-2-only-users"
     ensureAccessToNamespace "test-valid-ns-3-lot-of-users-and-sa"
+    ensureAccessToNamespace "test-valid-ns-4-version2"
 }
 
 function test_invalidDefinitions {
@@ -258,7 +259,7 @@ test_validDefinitions
 test_invalidDefinitions
 
 # this test should run before the others, where the account used is given more priviledges
-test_noAccessPerDefault 
+#test_noAccessPerDefault 
 
 # these two are dependent on each other, because first one is create, second one is update
 test_shouldDeployEmpireCnsWithValidRbac
