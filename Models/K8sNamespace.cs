@@ -32,12 +32,17 @@ namespace ConplementAG.CopsController.Models
 
         public K8sNamespaceMetadata(string name, string projectName, string projectCostCenter)
         {
-            Name= name;
-            Labels = new Dictionary<string, string>
+            Name = name;
+            Labels = new Dictionary<string, string>();
+            if (!string.IsNullOrWhiteSpace(projectName))
             {
-                { "conplement.de/projectname", projectName },
-                { "conplement.de/projectcostcenter", projectCostCenter }
-            };
+                Labels.Add("conplement.de/projectname", projectName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(projectName))
+            {
+                Labels.Add("conplement.de/projectcostcenter", projectCostCenter);
+            }
         }
     }
 }

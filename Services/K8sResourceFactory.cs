@@ -20,7 +20,7 @@ namespace ConplementAG.CopsController.Services
         {
             return new List<object>
             {
-                new K8sNamespace(copsNamespace.Metadata.Name, copsNamespace.Spec.Project?.Name ?? string.Empty, copsNamespace.Spec.Project?.CostCenter ?? string.Empty),
+                new K8sNamespace(copsNamespace.Metadata.Name, copsNamespace.Spec.Project?.Name, copsNamespace.Spec.Project?.CostCenter),
                 K8sRoleBinding.NamespaceFullAccess(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers,
                     copsNamespace.Spec.NamespaceAdminServiceAccounts ??  new List<CopsAdminServiceAccountSpec>().ToArray()),
                 K8sClusterRoleBinding.CopsNamespaceEditBinding(copsNamespace.Metadata.Name, copsNamespace.Spec.NamespaceAdminUsers,
