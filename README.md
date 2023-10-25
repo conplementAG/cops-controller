@@ -8,6 +8,7 @@ This project is "based" on [metacontroller](https://github.com/GoogleCloudPlatfo
 - Metacontroller is the simplest custom controller approach in Kubernetes, and offers easy parent / child resource tracking
 - Metacontroller integrates with "business" code via webhooks, which leaves us free to select any language for the implementation
 - [Azure Dev Spaces](https://docs.microsoft.com/en-us/azure/dev-spaces/), an excelent tool for development / debugging in Kubernetes, works at the moment the best with C#
+- [Telepresence](https://telepresence.io) an excelent tool for development / debugging controller within Kubernetes 
 
 ## Setup
 
@@ -15,18 +16,16 @@ Check the instructions on the [release page](https://github.com/conplementAG/cop
 
 ## Development
 
-For developing, we use Visual Studio Code and Azure Dev Spaces (running inside our CoreOps clusters).
+For developing, we use Visual Studio Code and Telepresence (intercepting cluster workload and redirect traffic to local service).
 
 1. Create / update your cops cluster to the latest state. Metacontroller, which is required for this controller to work, is delivered out of the box.
 
-2. Install / setup Azure DevSpaces on your cluster, incl. your DevSpace 
+2. Install / setup telepresence in your cluster
 
-`az aks use-dev-spaces -g ... -n ... --space space_name`
+`telepresence helm install` to install telepresence
+`telepresence intercept cops-controller -n coreops-cops-controller --port 5000:80` intercept the cops-controller service 
 
-If the command above fails (like to linux), then you can use the `azds controller create -tn ... -n ... -g ...` command instead.
-
-Install the Azure DevSpaces CLI and run:
-`azds space select --name your_space_name`
+Make sure you are running a version of cops-controller locally listing to port 5000 ( see 5. )
 
 3. Deploy the custom resource definitions `kubectl apply -f deployment/crds`
 
@@ -34,11 +33,10 @@ Install the Azure DevSpaces CLI and run:
     - C#
     - Docker
     - NuGet Package Manager
-    - Azure Dev Spaces
 
     Also, you might have issues with C# and .NET Core unless you install the dotnet core build tools as well: https://github.com/OmniSharp/omnisharp-roslyn/issues/1311#issuecomment-428361674
 
-5. Run `donet restore` / `dotnet build` and you are ready to go. For Azure DevSpace, either run `azds up` or simply start debugging through VS Code (launch configuration for Azure DevSpaces is included with the repository).
+5. Run `donet restore` / `dotnet build` and you are ready to go. 
 
 Hints on development:
  - When running inside Kubernetes, follow both metacontroller and this container logs. Metacontroller logs can be reached via `kubectl logs metacontroller-0 -n metacontroller -f` or a similar command. 
