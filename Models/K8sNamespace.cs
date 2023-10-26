@@ -36,12 +36,12 @@ namespace ConplementAG.CopsController.Models
             Labels = new Dictionary<string, string>();
             if (!string.IsNullOrWhiteSpace(projectName))
             {
-                Labels.Add("conplement.de/projectname", projectName);
+                Labels.Add("conplement.de/project-name", projectName);
             }
 
             if (!string.IsNullOrWhiteSpace(projectName))
             {
-                Labels.Add("conplement.de/projectcostcenter", projectCostCenter);
+                Labels.Add("conplement.de/project-cost-center", projectCostCenter);
             }
         }
     }
