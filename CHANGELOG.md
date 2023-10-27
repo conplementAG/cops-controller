@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0](https://github.com/conplementAG/cops-controller/compare/1.2.0...v1.3.0) (2023-10-27)
+
+
+### Features
+
+* add labels only when set ([2099c53](https://github.com/conplementAG/cops-controller/commit/2099c539070c3b972da4bb7fb8bed797b151b728))
+* add project name and costcenter labels ([ecd3437](https://github.com/conplementAG/cops-controller/commit/ecd3437e9245a74af4ff1e96e020bc410966892e))
+* **docu:** adapt documentation for using telepresence ([9e05301](https://github.com/conplementAG/cops-controller/commit/9e053017e363aefe3415ccd6bb102c4cb81a641f))
+* **tests:** add test for new crd version ([0bcff25](https://github.com/conplementAG/cops-controller/commit/0bcff2535b9af5db97b00cdf2f85d308b9bd485c))
+
+
+### Bug Fixes
+
+* adapt label names ([de25717](https://github.com/conplementAG/cops-controller/commit/de25717d781c0287a0a7189c6d140629e09a521b))
+* make costcenter camel case ([47ba880](https://github.com/conplementAG/cops-controller/commit/47ba880d594f3f438c8d1747b7f41e615c90bd96))
+
 ## [1.2.0](https://github.com/conplementAG/cops-controller/compare/1.1.1...v1.2.0) (2022-12-05)
 
 
