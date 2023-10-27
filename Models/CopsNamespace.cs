@@ -48,7 +48,7 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("costcenter")]
+        [JsonProperty("costCenter")]
         public string CostCenter { get; set; }
     }
 }

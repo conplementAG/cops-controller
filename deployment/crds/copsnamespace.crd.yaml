@@ -109,7 +109,7 @@ spec:
                         type: string
                         description: |-
                             Name of the project hosted within namespace
-                    costcenter:
+                    costCenter:
                         type: string
                         description: |-
                             Costcenter of the project hosted with namespace
