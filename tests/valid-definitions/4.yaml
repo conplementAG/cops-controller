@@ -22,4 +22,4 @@ spec:
     namespace: default
   project:
     name: testing
-    costcenter: "42"
+    costCenter: "42"
