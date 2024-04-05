@@ -16,6 +16,17 @@ jobs:
         run: |
           docker build --file Dockerfile --tag conplementag/cops-controller:${{ github.sha }} .
 
+      - name: Upload SBOM to DTrack
+        run: |
+          docker run --name cops-controller-${{ github.sha }} --entrypoint /bin/bash conplementag/cops-controller:${{ github.sha }}
+          docker cp cops-controller-${{ github.sha }}:/sboms/ ./sboms
+        
+          echo "Uploading SBOM to ${{ vars.DTRACK_URL }}/api/v1/bom"
+          curl --retry 5 --retry-delay 60 -X 'POST' '${{ vars.DTRACK_URL }}/api/v1/bom' -H 'Content-Type:multipart/form-data' -H 'X-API-Key:${{ secrets.DTRACK_API_KEY }}' -F 'project=${{ secrets.DTRACK_PROJECTID }}' -F 'bom=@./sboms/cops-controller-sbom.xml'
+
+          echo "Updating Project Version in ${{ vars.DTRACK_URL }}/api/v1/project"
+          curl --retry 5 --retry-delay 60 -X 'POST' '${{ vars.DTRACK_URL }}/api/v1/project' -H 'Content-Type:application/json' -H 'Accept:application/json' -H 'X-Api-Key:${{ secrets.DTRACK_API_KEY }}' -d '{"uuid": "${{ secrets.DTRACK_PROJECTID }}","name": "${{ vars.DTRACK_PROJECTNAME }}","version": "${{ github.sha }}","classifier": "APPLICATION","tags": [],"active": true}'
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
