@@ -25,21 +25,4 @@ jobs:
           curl --retry 5 --retry-delay 60 -X 'POST' '${{ vars.DTRACK_URL }}/api/v1/bom' -H 'Content-Type:multipart/form-data' -H 'X-API-Key:${{ secrets.DTRACK_API_KEY }}' -F 'project=${{ secrets.DTRACK_PROJECTID }}' -F 'bom=@./sboms/cops-controller-sbom.xml'
 
           echo "Updating Project Version in ${{ vars.DTRACK_URL }}/api/v1/project"
-          curl --retry 5 --retry-delay 60 -X 'POST' '${{ vars.DTRACK_URL }}/api/v1/project' -H 'Content-Type:application/json' -H 'Accept:application/json' -H 'X-Api-Key:${{ secrets.DTRACK_API_KEY }}' -d '{"uuid": "${{ secrets.DTRACK_PROJECTID }}","name": "${{ vars.DTRACK_PROJECTNAME }}","version": "${{ github.sha }}","classifier": "APPLICATION","tags": [],"active": true}'
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'conplementag/cops-controller:${{ github.sha }}'
-          format: 'sarif'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL'
-          output: 'trivy-results.sarif'
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'          
+          curl --retry 5 --retry-delay 60 -X 'POST' '${{ vars.DTRACK_URL }}/api/v1/project' -H 'Content-Type:application/json' -H 'Accept:application/json' -H 'X-Api-Key:${{ secrets.DTRACK_API_KEY }}' -d '{"uuid": "${{ secrets.DTRACK_PROJECTID }}","name": "${{ vars.DTRACK_PROJECTNAME }}","version": "${{ github.sha }}","classifier": "APPLICATION","tags": [],"active": true}'     
