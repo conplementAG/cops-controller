@@ -18,7 +18,7 @@ jobs:
 
       - name: Upload SBOM to DTrack
         run: |
-          docker run --name cops-controller-${{ github.sha }} --entrypoint /bin/bash conplementag/cops-controller:${{ github.sha }}
+          docker run --name cops-controller-${{ github.sha }} --entrypoint dotnet conplementag/cops-controller:${{ github.sha }} --info
           docker cp cops-controller-${{ github.sha }}:/sboms/ ./sboms
         
           echo "Uploading SBOM to ${{ vars.DTRACK_URL }}/api/v1/bom"

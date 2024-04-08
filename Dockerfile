@@ -32,10 +32,9 @@ RUN syft packages mcr.microsoft.com/dotnet/aspnet:6.0-jammy -o cyclonedx-xml=./d
 RUN cyclonedx-linux-x64 merge --input-files bom.xml docker-sbom.xml --output-file cops-controller-sbom.xml
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-jammy
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-jammy-chiseled
 
-RUN useradd -u 8877 donetuser
-USER donetuser
+USER app
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
