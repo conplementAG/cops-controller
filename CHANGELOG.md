@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.0](https://github.com/conplementAG/cops-controller/compare/1.3.0...v1.4.0) (2024-04-15)
+
+
+### Features
+
+* **container:** use chiseled base image ([b46ab44](https://github.com/conplementAG/cops-controller/commit/b46ab44d63d5e006a7684b7b379cf347bdc21627))
+* **pipeline:** remove trivy ([0c6d579](https://github.com/conplementAG/cops-controller/commit/0c6d579bba9a1a4deabfc0d566fdf940dfcaa4f3))
+* **sboms:** create sboms and upload to dtrack ([3482d06](https://github.com/conplementAG/cops-controller/commit/3482d066adfc1408fee06515614b62cf0f18efa9))
+
 ## [1.3.0](https://github.com/conplementAG/cops-controller/compare/1.2.0...v1.3.0) (2023-10-27)
 
 
