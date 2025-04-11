@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/conplementAG/cops-controller/compare/1.6.0...v1.6.1) (2025-04-11)
+
+
+### Bug Fixes
+
+* **dtrack:** make sure sbom is in version 1.5 ([8f5ff58](https://github.com/conplementAG/cops-controller/commit/8f5ff584748d8500c93e1fa5fc3cab7bd1b7e737))
+
 ## [1.6.0](https://github.com/conplementAG/cops-controller/compare/1.5.0...v1.6.0) (2025-04-11)
 
 
