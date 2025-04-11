@@ -2,6 +2,14 @@ apiVersion: v1
 entries:
   cops-controller:
   - apiVersion: v2
+    created: "2025-04-11T12:33:21.319765145Z"
+    description: CoreOps Controller Helm Chart
+    digest: 2270dd63276266ef7d4d0e58fff1d0322b6e329b36f6fff6e0fce043c02dff86
+    name: cops-controller
+    urls:
+    - https://github.com/conplementAG/cops-controller/releases/download/1.6.0/cops-controller-1.6.0.tgz
+    version: 1.6.0
+  - apiVersion: v2
     created: "2024-10-01T05:31:52.182209097Z"
     description: CoreOps Controller Helm Chart
     digest: 4d8bb0f4d83291d31c64401daca526d3bcfcdd7841da26cbc20bf624f370cc25
@@ -65,4 +73,4 @@ entries:
     urls:
     - https://github.com/conplementAG/cops-controller/releases/download/0.6.4/cops-controller-0.6.4.tgz
     version: 0.6.4
-generated: "2024-10-01T05:31:52.182238292Z"
+generated: "2025-04-11T12:33:21.319796153Z"
