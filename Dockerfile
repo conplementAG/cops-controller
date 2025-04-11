@@ -30,6 +30,7 @@ WORKDIR /sboms
 RUN /root/.dotnet/tools/dotnet-CycloneDX /app/ConplementAG.CopsController.csproj -o .
 RUN syft scan mcr.microsoft.com/dotnet/aspnet:8.0-jammy -o cyclonedx-xml=./docker-sbom.xml
 RUN cyclonedx-linux-x64 merge --input-files bom.xml docker-sbom.xml --output-file cops-controller-sbom.xml
+RUN cyclonedx-linux-x64 convert --input-file cops-controller-sbom.xml --output-file cops-controller-sbom-v1.5.xml --output-version v1_5 # DTrack 
 
 # .NET 8 LTS End of Lifetime is on 10/11/2026
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy-chiseled
@@ -41,5 +42,5 @@ ENV ASPNETCORE_URLS=http://+:8080
 
 WORKDIR /app
 COPY --from=build-env /app/out .
-COPY --from=build-env --chown=donetuser:donetuser /sboms/cops-controller-sbom.xml /sboms/cops-controller-sbom.xml
+COPY --from=build-env --chown=donetuser:donetuser /sboms/cops-controller-sbom-v1.5.xml /sboms/cops-controller-sbom.xml
 ENTRYPOINT ["dotnet", "ConplementAG.CopsController.dll"]
