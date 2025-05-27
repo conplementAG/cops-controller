@@ -4,6 +4,9 @@ on:
     branches:
       - master
   pull_request:
+    branches:
+      - master
+  workflow_dispatch:
 jobs:
   build:
     name: Build
@@ -16,13 +19,60 @@ jobs:
         run: |
           docker build --file Dockerfile --tag conplementag/cops-controller:${{ github.sha }} .
 
-      - name: Upload SBOM to DTrack
+      - name: Download and install syft
         run: |
-          docker run --name cops-controller-${{ github.sha }} --entrypoint dotnet conplementag/cops-controller:${{ github.sha }} --info
-          docker cp cops-controller-${{ github.sha }}:/sboms/ ./sboms
-        
+          curl -L https://github.com/anchore/syft/releases/download/v${{ vars.SYFT_VERSION }}/syft_${{ vars.SYFT_VERSION }}_linux_amd64.tar.gz --output syft.tgz
+          echo "${{ vars.SYFT_SHA256 }}  syft.tgz" > cksum.txt
+          sha256sum --check --status cksum.txt
+          if [ $? -eq 1 ]
+            then
+              echo "Security-Error: Unexpected SHA256 of downloaded syft executable!"
+              exit 1
+            fi
+          rm cksum.txt
+          tar xvfz syft.tgz
+          chmod +x ./syft
+          ./syft --version
+          export PATH=$PATH:$(pwd)
+
+      - name: Download and install cp BomCleaner
+        run: |
+          curl -L https://github.com/conplementAG/BomCleaner/releases/download/v${{ vars.BOMCLEANER_VERSION }}/dotnetbomcleaner --output dotnetbomcleaner
+          echo "${{vars.BOMCLEANER_SHA256 }}  dotnetbomcleaner" > cksum.txt
+          sha256sum --check --status cksum.txt
+          if [ $? -eq 1 ]
+          then
+            echo "Security-Error: Unexpected SHA256 of downloaded bomcleaner executable!"
+            exit 1
+          fi
+          rm cksum.txt
+          chmod +x ./dotnetbomcleaner
+          export PATH=$PATH:$(pwd)
+
+      - name: Create SBoM with syft
+        run: |
+          ./syft conplementag/cops-controller:${{ github.sha }} -c syft.yaml -o cyclonedx-xml=sbom.xml
+          ret_code=$?
+          if [ $ret_code -ne 0 ]
+          then
+            echo "syft failed to create SBoM with error code $ret_code"
+            exit 1
+          fi
+          cat sbom.xml
+
+      - name: Clean SBoM with cp BomCleaner
+        run: |
+          id=$(docker create conplementag/cops-controller:${{ github.sha }})
+          docker cp $id:/app/ConplementAG.CopsController.deps.json ./ConplementAG.CopsController.deps.json
+          docker rm -v $id
+          ./dotnetbomcleaner sbom.xml ConplementAG.CopsController.deps.json
+
+          cat ./cleanbom.xml
+
+      - name: Upload SBoM to DTrack
+        run: |
           echo "Uploading SBOM to ${{ vars.DTRACK_URL }}/api/v1/bom"
-          curl --retry 5 --retry-delay 60 -X 'POST' '${{ vars.DTRACK_URL }}/api/v1/bom' -H 'Content-Type:multipart/form-data' -H 'X-API-Key:${{ secrets.DTRACK_API_KEY }}' -F 'project=${{ secrets.DTRACK_PROJECTID }}' -F 'bom=@./sboms/cops-controller-sbom.xml'
+          curl --retry 5 --retry-delay 60 -X 'POST' '${{ vars.DTRACK_URL }}/api/v1/bom' -H 'Content-Type:multipart/form-data' -H 'X-API-Key:${{ secrets.DTRACK_API_KEY }}' -F 'project=${{ secrets.DTRACK_PROJECTID }}' -F 'bom=@./cleanbom.xml'
 
           echo "Updating Project Version in ${{ vars.DTRACK_URL }}/api/v1/project"
-          curl --retry 5 --retry-delay 60 -X 'POST' '${{ vars.DTRACK_URL }}/api/v1/project' -H 'Content-Type:application/json' -H 'Accept:application/json' -H 'X-Api-Key:${{ secrets.DTRACK_API_KEY }}' -d '{"uuid": "${{ secrets.DTRACK_PROJECTID }}","name": "${{ vars.DTRACK_PROJECTNAME }}","version": "${{ github.sha }}","classifier": "APPLICATION","tags": [],"active": true}'     
+          curl --retry 5 --retry-delay 60 -X 'POST' '${{ vars.DTRACK_URL }}/api/v1/project' -H 'Content-Type:application/json' -H 'Accept:application/json' -H 'X-Api-Key:${{ secrets.DTRACK_API_KEY }}' -d '{"uuid": "${{ secrets.DTRACK_PROJECTID }}","name": "${{ vars.DTRACK_PROJECTNAME }}","version": "${{ github.sha }}","classifier": "APPLICATION","tags": [],"active": true}'
