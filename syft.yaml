@@ -1,0 +1,16 @@
+default-catalogers:
+  - alpm-db-cataloger
+  - apk-db-cataloger
+  - binary-classifier-cataloger
+  - dotnet-packages-lock-cataloger
+  - dpkg-db-cataloger
+  - go-module-binary-cataloger
+  - go-module-file-cataloger
+  - linux-kernel-cataloger
+  - rpm-archive-cataloger
+  - rpm-db-cataloger
+  - sbom-cataloger
+check-for-app-update: true
+format:
+  pretty: true
+parallelism: 1
