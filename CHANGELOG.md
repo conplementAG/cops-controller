@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/conplementAG/cops-controller/compare/1.6.0...v1.7.0) (2025-07-15)
+
+
+### Features
+
+* quarterly updates ([bffd5b9](https://github.com/conplementAG/cops-controller/commit/bffd5b906bb0ea02c90458f6bf47da5012172f66))
+
+
+### Bug Fixes
+
+* **dtrack:** make sure sbom is in version 1.5 ([8f5ff58](https://github.com/conplementAG/cops-controller/commit/8f5ff584748d8500c93e1fa5fc3cab7bd1b7e737))
+
 ## [1.6.1](https://github.com/conplementAG/cops-controller/compare/1.6.0...v1.6.1) (2025-05-27)
 
 
