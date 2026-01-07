@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/conplementAG/cops-controller/compare/1.8.0...v1.9.0) (2026-01-07)
+
+
+### Features
+
+* quarterly updates ([1e38baf](https://github.com/conplementAG/cops-controller/commit/1e38baf0fe580e6b9acfdf517766a916a91f8e05))
+
 ## [1.8.0](https://github.com/conplementAG/cops-controller/compare/1.7.0...v1.8.0) (2025-10-07)
 
 
