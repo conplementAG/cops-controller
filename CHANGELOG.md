@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/conplementAG/cops-controller/compare/1.9.0...v1.10.0) (2026-03-02)
+
+
+### Features
+
+* **housekeeping:** upgrade to Ubuntu 24.04 LTS ([d6e0d58](https://github.com/conplementAG/cops-controller/commit/d6e0d58ceacda4c59b22aee8b99c689256760d46))
+
 ## [1.9.0](https://github.com/conplementAG/cops-controller/compare/1.8.0...v1.9.0) (2026-01-07)
 
 
