@@ -1,5 +1,5 @@
 # .NET 8 LTS End of Lifetime is on 10/11/2026
-FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:8.0-noble AS build-env
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . ./
 RUN dotnet publish ConplementAG.CopsController.csproj -c Release -o out
 
 # .NET 8 LTS End of Lifetime is on 10/11/2026
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-jammy-chiseled
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-noble-chiseled
 
 USER app
 
