@@ -28,7 +28,7 @@ jobs:
       - name: Build & Push Docker image
         if: ${{ steps.release.outputs.release_created }}
         run: |
-          docker build . --file Dockerfile --tag conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
+          docker build --pull . --file Dockerfile --tag conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
           docker push conplementag/cops-controller:v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
       - name: Download chart releaser
         if: ${{ steps.release.outputs.release_created }}
