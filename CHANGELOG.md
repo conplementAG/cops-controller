@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/conplementAG/cops-controller/compare/1.10.0...v1.10.1) (2026-05-11)
+
+
+### Bug Fixes
+
+* version bump for base image refreshes ([7ade52f](https://github.com/conplementAG/cops-controller/commit/7ade52f5360b55e164674a7f7717d37c8c7120e8))
+
 ## [1.10.0](https://github.com/conplementAG/cops-controller/compare/1.9.0...v1.10.0) (2026-03-02)
 
 
