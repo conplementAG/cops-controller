@@ -1,4 +1,5 @@
 ﻿using ConplementAG.CopsController.Services;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
@@ -11,6 +12,13 @@ namespace ConplementAG.CopsController.Controllers
     [ApiController]
     public class SyncController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
+
+        public SyncController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         [HttpGet]
         public ActionResult<string> Get()
         {
@@ -25,7 +33,8 @@ namespace ConplementAG.CopsController.Controllers
                 Log.Verbose("REQUEST===============================" + value.ToString(Newtonsoft.Json.Formatting.Indented));
 
                 var copsResource = CopsResourceFactory.Create(value);
-                var k8sResources = K8sResourceFactory.Create(copsResource);
+                var namespaceAdminRole = _configuration.GetValue("CopsController:NamespaceAdminRole", "cluster-admin");
+                var k8sResources = K8sResourceFactory.Create(copsResource, namespaceAdminRole);
 
                 JObject response = JObject.FromObject(
                     new
