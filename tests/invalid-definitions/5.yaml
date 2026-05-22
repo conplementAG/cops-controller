@@ -1,4 +1,4 @@
-apiVersion: coreops.conplement.cloud/v1
+apiVersion: coreops.conplement.cloud/v2
 kind: CopsNamespace
 metadata:
   name: test-invalid-ns-5-with-invalid-sa-formats-2

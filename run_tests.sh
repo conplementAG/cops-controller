@@ -6,11 +6,12 @@ programname=$0
 UNIVERSAL_TEST_IDENTIFIED="cops-controller-component-tests"
 
 function usage {
-    echo "usage: $programname [--install-helm-and-cops-controller] [-r repository] [-t tag]"
+    echo "usage: $programname [--install-helm-and-cops-controller] [-r repository] [-t tag] [-a namespaceAdminRole]"
     echo "  MAKE SURE YOU SPECIFY THE ARGUMENTS IN THE EXACT ORDER AS BELOW, THIS SCRIPT DOES NOT SUPPORT OUT OF ORDER ARGUMENTS!"
-    echo "  --install-helm-and-cops-controller (optional) use to install global helm in the cluster and to deploy the cops controller specified by the -r and -t arguments. Make sure you have Helm > 2.16 if you use this option and you are running on k8s > 1.16"
-    echo "  -r repository   (optional) cops controller image repository. Should be accessible from the cluster (e.g. remote registry or local one shared with the cluster)."
-    echo "  -t tag          (optional) cops controller image tag."
+    echo "  --install-helm-and-cops-controller (optional) install metacontroller and the cops controller specified by the -r and -t arguments. Requires Helm 3 and kubectl."
+    echo "  -r repository           (optional) cops controller image repository. Should be accessible from the cluster (e.g. remote registry or local one shared with the cluster)."
+    echo "  -t tag                  (optional) cops controller image tag."
+    echo "  -a namespaceAdminRole   (optional) ClusterRole to bind for namespace admins. Defaults to devops-namespace-admin ."
     echo " "
     echo "Prerequisites: "
     echo "   To run the tests, you need a running k8s cluster and docker engine"
@@ -83,6 +84,7 @@ function cleanup {
 installController="no"
 repository=""
 tag=""
+namespaceAdminRole="devops-namespace-admin"
 
 if [ -n "$1" ]; then # if any argument specified
     # all parameters mandatory now, in correct order
@@ -92,10 +94,13 @@ if [ -n "$1" ]; then # if any argument specified
         installController="yes"
         repository=$3
         tag=$5
+        if [ "$6" == "-a" ] && [ -n "$7" ]; then
+            namespaceAdminRole=$7
+        fi
     fi
 fi
 
 # register the cleanup function for all signal types (emulating finally block)
 trap cleanup EXIT ERR INT TERM
 
-. ./tests/tests.sh "$installController" "$repository" "$tag"
+. ./tests/tests.sh "$installController" "$repository" "$tag" "$namespaceAdminRole"
