@@ -1,4 +1,4 @@
-apiVersion: coreops.conplement.cloud/v1
+apiVersion: coreops.conplement.cloud/v2
 kind: CopsNamespace
 metadata:
   name: {{NAMESPACE}}
@@ -14,3 +14,6 @@ spec:
     namespace: {{SERVICE_ACCOUNT_NAMESPACE}}
   - serviceAccount: {{ADDITIONAL_SERVICE_ACCOUNT}}
     namespace: {{ADDITIONAL_SERVICE_ACCOUNT_NAMESPACE}}
+  project:
+    name: empire
+    costCenter: "66"

@@ -103,7 +103,7 @@ spec:
                 type: object
                 required: 
                 - name
-                - costcenter
+                - costCenter
                 properties:
                     name:
                         type: string

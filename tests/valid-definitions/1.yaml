@@ -1,4 +1,4 @@
-apiVersion: coreops.conplement.cloud/v1
+apiVersion: coreops.conplement.cloud/v2
 kind: CopsNamespace
 metadata:
   name: test-valid-ns-1-typical-with-non-existing-sa
@@ -13,3 +13,6 @@ spec:
     namespace: default
   - serviceAccount: notyetthere # but also with non-existing
     namespace: default
+  project:
+    name: test-project-1
+    costCenter: "42"

@@ -21,6 +21,7 @@ function logTestStarted {
 serviceAccountsNamespace="default"
 darthVaderAccount="cops-controller-darth-vader"
 kyloRenAccount="cops-controller-kylo-ren"
+namespaceAdminRole="${4:-devops-namespace-admin}"
 
 #########################################################################
 #                           Arrange helpers                             #
@@ -29,25 +30,33 @@ function setupCluster {
     installController=$1
     repository=$2
     tag=$3
+    role=$4
 
     if [ $installController == "yes" ]; then
-        kubectl -n kube-system create serviceaccount tiller --dry-run=true -o yaml | kubectl apply -f -
-        kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller --dry-run=true -o yaml | kubectl apply -f -
-        helm init --service-account tiller --wait --upgrade
-
-        # ensure metacontroller dependency in the cluster
-        metacontrollerVersion="v0.4.0"
-        kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/${metacontrollerVersion}/manifests/metacontroller-namespace.yaml"
-        kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/${metacontrollerVersion}/manifests/metacontroller-rbac.yaml"
-        kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/metacontroller/${metacontrollerVersion}/manifests/metacontroller.yaml"
+        # ensure metacontroller dependency in the cluster (v0.4.0 used v1beta1 CRDs removed in k8s 1.22+;
+        # project moved to metacontroller/metacontroller and is now distributed via Helm)
+        helm upgrade --install metacontroller oci://ghcr.io/metacontroller/metacontroller-helm \
+            --version=4.15.0 \
+            --namespace metacontroller \
+            --create-namespace \
+            --skip-crds \
+            --wait
 
         # install cops controller via the local chart
         copsControllerNamespace="coreops-cops-controller-component-test"
         kubectl apply -f deployment/crds
+        kubectl create namespace $copsControllerNamespace --dry-run=client -o yaml | kubectl apply -f -
 
-        helm upgrade --install --wait --timeout 60 --namespace $copsControllerNamespace \
+        # uninstall cops-controller from any namespace it may already occupy (cluster-scoped resources
+        # like ClusterRoles cannot be owned by two releases simultaneously)
+        for ns in $(helm list -A -o json 2>/dev/null | python3 -c "import json,sys; [print(r['namespace']) for r in json.load(sys.stdin) if r['name']=='cops-controller']" 2>/dev/null); do
+            helm uninstall cops-controller --namespace $ns --wait 2>/dev/null || true
+        done
+
+        helm upgrade --install --wait --timeout 60s --namespace $copsControllerNamespace \
             --set image.repository=$repository \
             --set image.tag=$tag \
+            --set copsController.namespaceAdminRole=$role \
             cops-controller deployment/cops-controller
     fi
 }
@@ -62,12 +71,11 @@ function setupServiceAccount {
     testAccountNamespace=$2
 
     # create account
-    kubectl create serviceaccount $testAccount -n $testAccountNamespace --dry-run=true -o yaml | kubectl apply -f -
+    kubectl create serviceaccount $testAccount -n $testAccountNamespace --dry-run=client -o yaml | kubectl apply -f -
 
-    # extract the secret, set into kubeconfig
-    serviceAccountSecret=$(kubectl get serviceaccount $testAccount -n $testAccountNamespace -o jsonpath={.secrets[0].name})
-    token=$(kubectl get secret $serviceAccountSecret -n $testAccountNamespace -o jsonpath={.data.token} | base64 --decode)
-    kubectl config set-credentials $testAccount --token=$token    
+    # create a token for the service account (works with k8s 1.24+ which no longer auto-creates SA secrets)
+    token=$(kubectl create token $testAccount -n $testAccountNamespace)
+    kubectl config set-credentials $testAccount --token=$token
 
     # create the new kubeconfig context
     kubectl config set-context $testAccount --user=$testAccount --cluster=$(kubectl config view --minify -o jsonpath={.clusters[0].name})
@@ -199,6 +207,13 @@ function test_shouldDeployEmpireCnsWithValidRbac {
     ensureAccessToNamespace $namespaceName
     ensureAllResourcesAreSupported $namespaceName
 
+    kubectl config use-context $INITIAL_CONTEXT
+    roleRefName=$(kubectl get rolebinding copsnamespace-user -n $namespaceName -o jsonpath='{.roleRef.name}')
+    if [ "$roleRefName" != "$namespaceAdminRole" ]; then
+        fail "Expected rolebinding roleRef to be $namespaceAdminRole but got $roleRefName"
+    fi
+    success "RoleBinding roleRef is $namespaceAdminRole as expected"
+
     # no access for other accounts
     kubectl config use-context $kyloRenAccount
     
@@ -249,7 +264,7 @@ function test_shouldUpdateEmpireCnsWithAdditionalRbac {
 #                              Test runner                              #
 #########################################################################
 
-setupCluster "$1" "$2" "$3"
+setupCluster "$1" "$2" "$3" "$namespaceAdminRole"
 
 setupTheEmpireServiceAccounts
 
