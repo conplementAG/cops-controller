@@ -31,4 +31,6 @@ spec:
           env:
           - name: Serilog__MinimumLevel
             value: Error
+          - name: CopsController__NamespaceAdminRole
+            value: {{ .Values.copsController.namespaceAdminRole }}
            

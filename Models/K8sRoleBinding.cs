@@ -22,8 +22,9 @@ namespace ConplementAG.CopsController.Models
         [JsonProperty("roleRef")]
         public K8sRoleRef RoleRef { get; set; }
 
-        public static K8sRoleBinding NamespaceFullAccess(string namespacename, 
-            ICollection<string> users, ICollection<CopsAdminServiceAccountSpec> serviceAccounts)
+        public static K8sRoleBinding NamespaceFullAccess(string namespacename,
+            ICollection<string> users, ICollection<CopsAdminServiceAccountSpec> serviceAccounts,
+            string roleName = "cluster-admin")
         {
             if (string.IsNullOrEmpty(namespacename))
             {
@@ -52,11 +53,7 @@ namespace ConplementAG.CopsController.Models
                 Kind = "RoleBinding",
                 ApiVersion = "rbac.authorization.k8s.io/v1",
                 Metadata = new K8sMetadata { Name = $"copsnamespace-user", Namespace = namespacename },
-                // The in-built clusterrole cluster-admin allows access to all resources (wildcard),
-                // so that we can use that clusterrole instead of writing our own which is far more brittle.
-                // Since we scope the cluster-admin to a namespace using RoleBinding (in contrast to ClusterRoleBinding)
-                // this is a good approach.
-                RoleRef = new K8sRoleRef("ClusterRole", "cluster-admin", "rbac.authorization.k8s.io")
+                RoleRef = new K8sRoleRef("ClusterRole", roleName, "rbac.authorization.k8s.io")
             };
 
             var subjects = users.ToList()
