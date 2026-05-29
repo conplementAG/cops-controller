@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/conplementAG/cops-controller/compare/1.10.1...v1.10.2) (2026-05-29)
+
+
+### Bug Fixes
+
+* remove default value for rolename in models ([d040444](https://github.com/conplementAG/cops-controller/commit/d040444a597138dceca5a0be325d323bea719376))
+
 ## [1.10.1](https://github.com/conplementAG/cops-controller/compare/1.10.0...v1.10.1) (2026-05-11)
 
 
