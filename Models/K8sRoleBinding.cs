@@ -24,7 +24,7 @@ namespace ConplementAG.CopsController.Models
 
         public static K8sRoleBinding NamespaceFullAccess(string namespacename,
             ICollection<string> users, ICollection<CopsAdminServiceAccountSpec> serviceAccounts,
-            string roleName = "cluster-admin")
+            string roleName)
         {
             if (string.IsNullOrEmpty(namespacename))
             {
