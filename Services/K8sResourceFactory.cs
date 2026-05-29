@@ -7,7 +7,7 @@ namespace ConplementAG.CopsController.Services
 {
     public class K8sResourceFactory
     {
-        public static IList<object> Create(CopsResource resource, string namespaceAdminRole = "cluster-admin")
+        public static IList<object> Create(CopsResource resource, string namespaceAdminRole)
         {
             var source = Convert.ChangeType(resource, resource.GetType());
 
