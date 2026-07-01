@@ -39,4 +39,4 @@ Make sure you are running a version of cops-controller locally listing to port 5
 5. Run `donet restore` / `dotnet build` and you are ready to go. 
 
 Hints on development:
- - When running inside Kubernetes, follow both metacontroller and this container logs. Metacontroller logs can be reached via `kubectl logs metacontroller-0 -n metacontroller -f` or a similar command. 
+ - When running inside Kubernetes, follow both metacontroller and this container logs. Metacontroller logs can be reached via `kubectl logs metacontroller-0 -n metacontroller -f` or a similar command.
