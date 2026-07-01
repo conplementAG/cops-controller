@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.3](https://github.com/conplementAG/cops-controller/compare/1.10.2...v1.10.3) (2026-07-01)
+
+
+### Bug Fixes
+
+* refresh base image for openssl 3.0.13-0ubuntu3.11 ([c8bfce0](https://github.com/conplementAG/cops-controller/commit/c8bfce0cb19066ebccd13e7b2dc6345f96dd4699))
+
 ## [1.10.2](https://github.com/conplementAG/cops-controller/compare/1.10.1...v1.10.2) (2026-05-29)
 
 
