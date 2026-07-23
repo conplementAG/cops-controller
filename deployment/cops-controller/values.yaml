@@ -1,5 +1,5 @@
 image:
   repository: conplementag/cops-controller
-  tag: 1.10.3 # x-release-please-version
+  tag: 1.11.0 # x-release-please-version
 copsController:
   namespaceAdminRole: cluster-admin

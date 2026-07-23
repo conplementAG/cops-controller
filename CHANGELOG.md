@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/conplementAG/cops-controller/compare/1.10.3...v1.11.0) (2026-07-23)
+
+
+### Features
+
+* upgrade to dotnet 10 ([ed02d43](https://github.com/conplementAG/cops-controller/commit/ed02d43f67416f603c228e0e107eb074745d81d7))
+
 ## [1.10.3](https://github.com/conplementAG/cops-controller/compare/1.10.2...v1.10.3) (2026-07-01)
 
 
