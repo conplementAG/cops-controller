@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/conplementAG/cops-controller/compare/1.11.0...v1.12.0) (2026-10-12)
+
+
+### Features
+
+* housekeeping - quaterly upgrades ([2dc1cec](https://github.com/conplementAG/cops-controller/commit/2dc1cec5863eb5001eea07f2366b1cfe478a3f28))
+
 ## [1.11.0](https://github.com/conplementAG/cops-controller/compare/1.10.3...v1.11.0) (2026-07-23)
 
 
